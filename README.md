@@ -8,10 +8,12 @@ DXE Core binary that will be used in QEMU firmware.
 Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA for aarch64 architecture.
 
 To build, use the same environment as the [patina](https://github.com/OpenDevicePartnership/patina) build and execute the following steps:
+
 1) Set the RUSTC_BOOTSTRAP environment variable to 1
    - Linux: `export RUSTC_BOOTSTRAP=1`
    - Windows (cmd): `set RUSTC_BOOTSTRAP=1`
    - Windows (powershell): `$env:RUSTC_BOOTSTRAP=1`
+
 2) Execute cargo make, specifying the target project
    - Q35 debug: `cargo make q35`
    - Q35 release: `cargo make q35-release`
