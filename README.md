@@ -5,25 +5,26 @@
 The main purpose of this repository is to integrate the Rust components and dependencies necessary to build a Rust
 DXE Core binary that will be used in QEMU firmware.
 
-Currently, two QEMU platforms are supported. The build commands for each are given below.
+Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA for aarch64 architecture.
 
-Set the `RUSTC_BOOTSTRAP` environment variable to `1` in the terminal used for the build.
+To build, use the same environment as the [patina](https://github.com/OpenDevicePartnership/patina) build and execute the following steps:
+1) Set the RUSTC_BOOTSTRAP environment variable to 1
+   - Linux: `export RUSTC_BOOTSTRAP=1`
+   - Windows (cmd): `set RUSTC_BOOTSTRAP=1`
+   - Windows (powershell): `$env:RUSTC_BOOTSTRAP=1`
+2) Execute cargo make, specifying the target project
+   - Q35 debug: `cargo make q35`
+   - Q35 release: `cargo make q35-release`
+   - SBSA debug: `cargo make sbsa`
+   - SBSA release: `cargo make sbsa-release`
+ 
+3) The binaries will be located in the target directory
+   - Q35 debug: `target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi`
+   - Q35 release: `target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi`
+   - SBSA debug: `target/aarch64-unknown-uefi/debug/qemu_q35_dxe_core.efi`
+   - SBSA release: `target/aarch64-unknown-uefi/release/qemu_q35_dxe_core.efi`
 
-- Linux: `export RUSTC_BOOTSTRAP=1`
-- Windows (cmd): `set RUSTC_BOOTSTRAP=1`
-- Windows (powershell): `$env:RUSTC_BOOTSTRAP=1`
-
----
-
-- **QEMU Q35**: `cargo make q35`
-  - Release build: `cargo make q35-release`
-- **QEMU SBSA**: `cargo make sbsa`
-  - Release build: `cargo make sbsa-release`
-
-The binaries are produced in the `target` directory.
-
-- **QEMU Q35**: `target/x86_64-unknown-uefi`
-- **QEMU SBSA**: `target/aarch64-unknown-uefi`
+The resulting .EFI file is a direct replacement for the dxe core driver in the [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build
 
 ## Working with Local Dependencies
 
