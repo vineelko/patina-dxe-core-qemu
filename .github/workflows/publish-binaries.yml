@@ -98,7 +98,7 @@ jobs:
           python-version: "3.12"
 
       - name: Publish Nuget
-        if: ${{ github.event_name == 'release' }}
+        # if: ${{ github.event_name == 'release' }}
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
           LICENSE_FILE_PATH: .nuget/license.txt
