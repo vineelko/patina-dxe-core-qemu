@@ -2,23 +2,35 @@
 
 ## Overview
 
-The main purpose of this repository is to integrate the Rust components and dependencies necessary to build a Rust
-DXE Core binary that will be used in QEMU firmware.
+The main purpose of this repository is to integrate the Rust components and dependencies necessary to build a sample
+Rust DXE Core binary that can be used in QEMU UEFI firmware build.
 
 Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA for aarch64 architecture.
 
-To build, use the same environment as the [patina](https://github.com/OpenDevicePartnership/patina) build and execute cargo make, specifying the target project
-   - Q35 (x64) debug: `cargo make q35`
-   - Q35 (x64) release: `cargo make q35-release`
-   - SBSA (aarch64) debug: `cargo make sbsa`
-   - SBSA (aarch64): `cargo make sbsa-release`
- 
-The binaries will be located in the target directory corresponding to the build
-   - Q35 (x64) debug: `target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi`
-   - Q35 (x64) release: `target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi`
-   - SBSA (aarch64) debug: `target/aarch64-unknown-uefi/debug/qemu_q35_dxe_core.efi`
-   - SBSA (aarch64) release: `target/aarch64-unknown-uefi/release/qemu_q35_dxe_core.efi`
-And the resulting .EFI file is a direct replacement for the dxe core driver in the [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build
+To build an executable, this repo uses the same compiler setup steps that are used in the patina project
+[readme.md file build section](https://github.com/OpenDevicePartnership/patina#Build).  Once the compiler is installed,
+executing cargo make will output a DXE core .EFI file that is a direct replacement for the dxe core driver in the
+[patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
+   - Q35 (x64) debug
+      ```
+      Compile Command:  'cargo make q35'
+      Output File:      'target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi'
+      ```
+   - Q35 (x64) release
+      ```
+      Compile Command:  'cargo make q35-release'
+      Output File:      'target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi'
+      ```
+   - SBSA (aarch64) debug
+      ```
+      Compile Command:  'cargo make sbsa'
+      Output File:      'target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi'
+      ```
+   - SBSA (aarch64) release
+      ```
+      Compile Command:  'cargo make sbsa-release'
+      Output File:      'target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi'
+      ```
 
 ## Working with Local Dependencies
 
