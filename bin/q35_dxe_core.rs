@@ -22,7 +22,7 @@ use uefi_sdk::{log::Format, serial::uart::Uart16550};
 extern crate alloc;
 use alloc::vec;
 
-use performance::Performance;
+use patina_performance::Performance;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -87,7 +87,14 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_component(uefi_sdk_services::sw_mmi_manager::SwMmiManager::new())
         .with_component(uefi_sdk_services::mm_communicator::MmCommunicator::new())
         .with_component(q35_services::mm_test::QemuQ35MmTest::new())
-        .with_component(Performance)
+        .with_config(patina_performance::EnabledMeasurement(&[
+            // patina_performance::Measurement::DriverBindingStart,
+            // patina_performance::Measurement::DriverBindingStop,
+            // patina_performance::Measurement::DriverBindingSupport,
+            // patina_performance::Measurement::LoadImage,
+            // patina_performance::Measurement::StartImage,
+        ]))
+        .with_component(patina_performance::Performance)
         .start()
         .unwrap();
 
