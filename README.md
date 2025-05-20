@@ -12,33 +12,33 @@ To build an executable, this repo uses the same compiler setup steps that are us
 executing cargo make will output a DXE core .EFI file that is a direct replacement for the dxe core driver in the
 [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
 
-   - Q35 (x64) debug
+- Q35 (x64) debug
 
-      ```
-      Compile Command:  'cargo make q35'
-      Output File:      'target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi'
-      ```
-      
-   - Q35 (x64) release
+   ```shell
+   Compile Command:  'cargo make q35'
+   Output File:      'target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi'
+   ```
 
-      ```
-      Compile Command:  'cargo make q35-release'
-      Output File:      'target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi'
-      ```
+- Q35 (x64) release
 
-   - SBSA (aarch64) debug
+   ```shell
+   Compile Command:  'cargo make q35-release'
+   Output File:      'target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi'
+   ```
 
-      ```
-      Compile Command:  'cargo make sbsa'
-      Output File:      'target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi'
-      ```
+- SBSA (aarch64) debug
 
-   - SBSA (aarch64) release
+   ```shell
+   Compile Command:  'cargo make sbsa'
+   Output File:      'target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi'
+   ```
 
-      ```
-      Compile Command:  'cargo make sbsa-release'
-      Output File:      'target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi'
-      ```
+- SBSA (aarch64) release
+
+   ```shell
+   Compile Command:  'cargo make sbsa-release'
+   Output File:      'target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi'
+   ```
 
 ## Working with Local Dependencies
 
