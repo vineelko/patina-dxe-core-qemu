@@ -145,20 +145,84 @@ release ${2}
 release ${3}
 '''
 
-[tasks.build-efi]
+[tasks.patch]
 private = true
+script_runner = "@duckscript"
+script = '''
+1 = get_env CARGO_MAKE_TASK_ARGS
+needs_patch = not is_empty ${1}
+patch_str = concat "\n[patch.patina-fw]"
+
+if ${needs_patch}
+    2 = split ${1} ;
+    for repo in ${2}
+        echo "Processing repo: ${repo}"
+        if not is_path_exists ${repo}/Cargo.toml
+            echo "Path ${repo}/Cargo.toml does not exist."
+            exit 1
+        end
+
+        output = exec cargo metadata --format-version 1 --no-deps --manifest-path ${repo}/Cargo.toml
+        if not eq ${output.code} 0
+            echo "Error running cargo metadata on ${repo}"
+            exit 1
+        end
+
+        metadata = json_parse --collection ${output.stdout}
+        packages = map_get ${metadata} packages
+
+        for package in ${packages}
+            name = map_get ${package} name
+            path = map_get ${package} id
+
+            path = replace ${path} "path+file:///" ""
+            temp = split ${path} "#"
+            path = array_get ${temp} 0
+
+            patch_str = concat ${patch_str} \n${name} = { path = \"${path}\"}
+            release ${name}
+            release ${path}
+            release ${temp}
+        end
+
+        release ${packages}
+        release ${metadata}
+        release ${output}
+    end
+end
+
+if ${needs_patch}
+    # Create a backup to revert to
+    cp Cargo.toml Cargo.toml.bak
+
+    # Patch the Cargo.toml file
+    appendfile Cargo.toml ${patch_str}
+end
+
+# Execute the actual cargo command
+exit_code = exec --get-exit-code cargo make build-efi
+
+if ${needs_patch}
+    # Revert the Cargo.toml file to the original state
+    mv Cargo.toml.bak Cargo.toml
+end
+
+exit #{exit_code}
+'''
+
+[tasks.build-efi]
 command = "cargo"
 args = ["build", "--bin", "${CARGO_BIN_NAME}", "--target", "${CARGO_BIN_TARGET}", "--features", "${CARGO_BIN_FEATURES}", "@@split(NO_STD_FLAGS, )"]
 
 [tasks.build-efi-x64]
 private = true
 env = { CARGO_BIN_TARGET = "x86_64-unknown-uefi", CARGO_BIN_FEATURES = "x64" }
-run_task = "build-efi"
+run_task = "patch"
 
 [tasks.build-efi-aarch64]
 private = true
 env = { CARGO_BIN_TARGET = "aarch64-unknown-uefi", CARGO_BIN_FEATURES = "aarch64" }
-run_task = "build-efi"
+run_task = "patch"
 
 [tasks.q35]
 description = """Builds the DEBUG Q35 UEFI firmware."""

@@ -27,43 +27,19 @@ The binaries are produced in the `target` directory.
 
 ## Working with Local Dependencies
 
-In your development workflow, you should test your firmware changes on QEMU. You can replace the dependencies in this
-repo with your local repo for each dependency to build and test that code.
+If working with local dependencies outside of this repository, such as making changes in [Patina](https://github.com/OpenDevicePartnership/patina)
+that you wish to compile into one of the qemu binaries in this repository, then simply add the path to the local
+repository to the command line, and the build tools will automatically patch in all crates in that repository for that
+build.
 
-To do that, follow the [Overriding Dependencies](https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html)
-section in the Cargo Book. Notice that although the `crates-io` registry is replaced with the `UefiRust` in our repo
-in `.cargo/config.toml`, the `crates-io` registry is still patched here similar to the examples in the Cargo Book.
-
-```toml
-adv_logger = { version = "7" }
-dxe_core = { version = "7" }
-log = { version = "^0.4", default-features = false, features = [
-    "release_max_level_warn",
-] }
-sample_components = { version = "7" }
-section_extractor = { version = "9" }
-uefi_cpu = { version = "9" }
-uefi_debugger = { version = "9" }
-uefi_sdk = { version = "1" }
+``` cmd
+> cargo make q35 C:\\src\\patina\\
+> cargo make sbsa C:/src/patina C:/src/patina-paging
 ```
 
-To produce the following temporary contents in the `Cargo.toml` file:
-
-```toml
-adv_logger = { version = "7" }
-dxe_core = { version = "7" }
-log = { version = "^0.4", default-features = false, features = [
-    "release_max_level_warn",
-] }
-sample_components = { version = "7" }
-section_extractor = { version = "9" }
-uefi_cpu = { version = "9" }
-uefi_debugger = { version = "9" }
-uefi_sdk = { version = "1" }
-
-[patch.crates-io]
-dxe_core = { path = "../uefi-dxe-core/dxe_core" }
-```
+**IMPORTANT**: This tool temporarily adds the patches to the Cargo.toml, so you must meet Cargo.toml expectations
+with the path that you define. That is to say, if you are providing windows pathing, you must use double slashes
+(`\\`).
 
 ## NuGet Publishing Instructions
 
