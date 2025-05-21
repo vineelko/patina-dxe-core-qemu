@@ -8,12 +8,6 @@ STD_FLAGS = "--profile ${RUSTC_PROFILE} --features std"
 TEST_FLAGS = { value = "", condition = { env_not_set = ["TEST_FLAGS"] } }
 COV_FLAGS = { value = "--workspace --out html --out xml --exclude-files **/tests/* --exclude-files **/benches/* --exclude uefi_test_macro", condition = { env_not_set = ["COV_FLAGS"] } }
 
-[env.development]
-RUSTC_PROFILE = "dev"
-
-[env.release]
-RUSTC_PROFILE = "release"
-
 [tasks.individual-package-targets]
 script_runner = "@duckscript"
 script = '''
@@ -35,48 +29,6 @@ joined_args = trim ${joined_args}
 set_env INDIVIDUAL_PACKAGE_TARGETS ${joined_args}
 release ${joined_args}
 '''
-
-[tasks.build]
-description = """Builds a single rust package with the standard library.
-
-Customizations:
-    -p [development|release]: Builds in debug or release. Default: development
-    -e FEATURES=[feature,...]: Builds with the specified features. Default: none
-
-Example:
-    `cargo make build`
-    `cargo make -p release build`
-    `cargo make -e FEATURES=feature1,feature2 build`
-"""
-alias = "build-std"
-
-[tasks.build-std]
-description = """Builds crates in the repository with the standard library.
-
-Customizations:
-    -p [development|release]: Builds in debug or release. Default: development
-    -e FEATURES=[feature,...]: Builds with the specified features. Default: none
-
-Example:
-    `cargo make build-std`
-    `cargo make -p release build-std`
-    `cargo make build-std <package_name>`
-"""
-clear = true
-command = "cargo"
-args = ["build", "@@split(INDIVIDUAL_PACKAGE_TARGETS, )", "@@split(STD_FLAGS, )",]
-dependencies = ["individual-package-targets"]
-
-[tasks.run-bin]
-description = """Runs the standard library DXE core.
-
-Example:
-    `cargo make run-bin`
-    `cargo make -p release run-bin`
-"""
-clear = true
-command = "cargo"
-args = ["run", "@@split(STD_FLAGS, )", "--example", "dxe_core_std"]
 
 [tasks.build-bin]
 description = """Builds the standard library DXE core.
@@ -193,29 +145,40 @@ release ${2}
 release ${3}
 '''
 
-[tasks.q35]
-clear = true
-env = { RUSTC_BOOTSTRAP = "1"}
+[tasks.build-efi]
+private = true
 command = "cargo"
-args = ["build", "--bin", "qemu_q35_dxe_core", "--target", "x86_64-unknown-uefi", "--features=x64", "-Zbuild-std=core,compiler_builtins,alloc", "-Zbuild-std-features=compiler-builtins-mem", "-Zunstable-options", "--timings=html"]
+args = ["build", "--bin", "${CARGO_BIN_NAME}", "--target", "${CARGO_BIN_TARGET}", "--features", "${CARGO_BIN_FEATURES}", "@@split(NO_STD_FLAGS, )"]
+
+[tasks.build-efi-x64]
+private = true
+env = { CARGO_BIN_TARGET = "x86_64-unknown-uefi", CARGO_BIN_FEATURES = "x64" }
+run_task = "build-efi"
+
+[tasks.build-efi-aarch64]
+private = true
+env = { CARGO_BIN_TARGET = "aarch64-unknown-uefi", CARGO_BIN_FEATURES = "aarch64" }
+run_task = "build-efi"
+
+[tasks.q35]
+description = """Builds the DEBUG Q35 UEFI firmware."""
+env = { CARGO_BIN_NAME = "qemu_q35_dxe_core", "RUSTC_PROFILE" = "dev" }
+run_task = "build-efi-x64"
 
 [tasks.q35-release]
-clear = true
-env = { RUSTC_BOOTSTRAP = "1"}
-command = "cargo"
-args = ["build", "--bin", "qemu_q35_dxe_core", "--target", "x86_64-unknown-uefi", "--features=x64", "-Zbuild-std=core,compiler_builtins,alloc", "-Zbuild-std-features=compiler-builtins-mem", "-Zunstable-options", "--timings=html", "--profile=release"]
+description = """Builds the RELEASE Q35 UEFI firmware."""
+env = { CARGO_BIN_NAME = "qemu_q35_dxe_core", "RUSTC_PROFILE" = "release" }
+run_task = "build-efi-x64"
 
 [tasks.sbsa]
-clear = true
-env = { RUSTC_BOOTSTRAP = "1"}
-command = "cargo"
-args = ["build", "--bin", "qemu_sbsa_dxe_core", "--target", "aarch64-unknown-uefi", "--features=aarch64", "-Zbuild-std=core,compiler_builtins,alloc", "-Zbuild-std-features=compiler-builtins-mem", "-Zunstable-options", "--timings=html"]
+description = """Builds the DEBUG SBSA UEFI firmware."""
+env = { CARGO_BIN_NAME = "qemu_sbsa_dxe_core", "RUSTC_PROFILE" = "dev" }
+run_task = "build-efi-aarch64"
 
 [tasks.sbsa-release]
-clear = true
-env = { RUSTC_BOOTSTRAP = "1"}
-command = "cargo"
-args = ["build", "--bin", "qemu_sbsa_dxe_core", "--target", "aarch64-unknown-uefi", "--features=aarch64", "-Zbuild-std=core,compiler_builtins,alloc", "-Zbuild-std-features=compiler-builtins-mem", "-Zunstable-options", "--timings=html", "--profile=release"]
+description = """Builds the RELEASE SBSA UEFI firmware."""
+env = { CARGO_BIN_NAME = "qemu_sbsa_dxe_core", "RUSTC_PROFILE" = "release" }
+run_task = "build-efi-aarch64"
 
 [tasks.doc]
 description = "Builds all rust documentation in the workspace. Example `cargo make doc`"
@@ -252,7 +215,6 @@ dependencies = [
     "deny",
     "clippy",
     "cspell",
-    "build",
     "q35",
     "sbsa",
     "q35-release",
