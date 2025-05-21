@@ -12,21 +12,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "adv_logger"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "34649f07a320cddfdb7c5eb7c845e4f2434739cb426958ef13e133a45e257cda"
-dependencies = [
- "log",
- "mu_pi",
- "mu_rust_helpers",
- "r-efi",
- "spin",
- "uefi_sdk",
- "uefi_test",
-]
-
-[[package]]
 name = "alloc-no-stdlib"
 version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -38,7 +23,7 @@ version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f0dcb1a29e42b98d24e0706354839b8d02f0d01445d819dc06cef8919a57548"
 dependencies = [
- "bitflags 2.9.0",
+ "bitflags 2.9.1",
 ]
 
 [[package]]
@@ -72,9 +57,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "bitflags"
-version = "2.9.0"
+version = "2.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c8214115b7bf84099f1309324e63141d4c5d7cc26862f97a0a857dbefe165bd"
+checksum = "1b8e56985ec62d17e9c1001dc89c88ecd7dc08e47eba5ec7c29c7b5eeecde967"
 
 [[package]]
 name = "bitvec"
@@ -86,16 +71,6 @@ dependencies = [
  "radium",
  "tap",
  "wyz",
-]
-
-[[package]]
-name = "boot_services"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "c3654bfcc82cde85255b79d170bec824c3c851b0c8f5b3898be92980608d6e27"
-dependencies = [
- "r-efi",
- "uefi_protocol",
 ]
 
 [[package]]
@@ -146,49 +121,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "driver_binding"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "be6aff3349e4e57e9be181705c936feaa4c6ecb44662329e8c3acb105de54939"
-dependencies = [
- "boot_services",
- "log",
- "r-efi",
- "uefi_protocol",
-]
-
-[[package]]
-name = "dxe_core"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "676e83f283ff14d8bc960d792f15885834327bf179c830513682731427c7ae6a"
-dependencies = [
- "arm-gic",
- "compile-time",
- "crc32fast",
- "goblin",
- "lazy_static",
- "linked_list_allocator",
- "log",
- "mu_pi",
- "mu_rust_helpers",
- "paging",
- "r-efi",
- "scroll",
- "spin",
- "uefi_collections",
- "uefi_corosensei",
- "uefi_cpu",
- "uefi_debugger",
- "uefi_depex",
- "uefi_device_path",
- "uefi_performance",
- "uefi_sdk",
- "uefi_test",
- "uuid",
-]
-
-[[package]]
 name = "fallible-streaming-iterator"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -212,7 +144,7 @@ version = "0.7.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8062b93565ea9fe2e60a0dd3c252f0d48c27cf223dad7ead028e361181a2c1a5"
 dependencies = [
- "bitflags 2.9.0",
+ "bitflags 2.9.1",
  "cfg-if",
  "log",
  "managed",
@@ -263,18 +195,18 @@ dependencies = [
 
 [[package]]
 name = "linkme"
-version = "0.3.32"
+version = "0.3.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22d227772b5999ddc0690e733f734f95ca05387e329c4084fe65678c51198ffe"
+checksum = "a1b1703c00b2a6a70738920544aa51652532cacddfec2e162d2e29eae01e665c"
 dependencies = [
  "linkme-impl",
 ]
 
 [[package]]
 name = "linkme-impl"
-version = "0.3.32"
+version = "0.3.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71a98813fa0073a317ed6a8055dcd4722a49d9b862af828ee68449adb799b6be"
+checksum = "04d55ca5d5a14363da83bf3c33874b8feaa34653e760d5216d7ef9829c88001a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -302,16 +234,6 @@ name = "managed"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ca88d725a0a943b096803bd34e73a4437208b6077654cc4ecb2947a5f91618d"
-
-[[package]]
-name = "mtrr"
-version = "0.1.1"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "6523fd11d64f874bc401df81cd7bb1d5e5181b7f30163a91d7d8abcc113e86cb"
-dependencies = [
- "bitfield-struct",
- "cfg-if",
-]
 
 [[package]]
 name = "mu_pi"
@@ -388,22 +310,303 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 
 [[package]]
-name = "paging"
-version = "4.0.2"
+name = "paste"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+
+[[package]]
+name = "patina_adv_logger"
+version = "0.1.0"
 source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "10fe034187005e2bbd14b8880121cf2263ac2397ab6d25ccf3680402450a5a78"
+checksum = "50ac9893f2becc0448ae9e8acb4dc57c6dcb6f76c55e0923a3049eb0e61bf218"
+dependencies = [
+ "log",
+ "mu_pi",
+ "mu_rust_helpers",
+ "patina_sdk",
+ "patina_test",
+ "r-efi",
+ "spin",
+]
+
+[[package]]
+name = "patina_boot_services"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "dc6adac4b11a584087dfe6d5ac9e0d3ff5b67fbac3a8f1c0b5c6f5672fb2c27e"
+dependencies = [
+ "patina_uefi_protocol",
+ "r-efi",
+]
+
+[[package]]
+name = "patina_debugger"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "83bb0cdf9b7d43edc39e4ad175d12fefe89f1e1b377ac7d33744786273ca5ef0"
 dependencies = [
  "bitfield-struct",
- "bitflags 2.9.0",
+ "cfg-if",
+ "gdbstub",
+ "log",
+ "patina_internal_cpu",
+ "patina_paging",
+ "patina_sdk",
+ "spin",
+]
+
+[[package]]
+name = "patina_driver_binding"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "b82ba2027d83df8d294cc876c18cadd8404acdfb7fc523041fd88a140c3212b9"
+dependencies = [
+ "log",
+ "patina_boot_services",
+ "patina_uefi_protocol",
+ "r-efi",
+]
+
+[[package]]
+name = "patina_dxe_core"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "040b3971217c84d69ab50ec59c554d7b0b3aa830d04a3e20ed34621548f9af9a"
+dependencies = [
+ "arm-gic",
+ "compile-time",
+ "crc32fast",
+ "goblin",
+ "lazy_static",
+ "linked_list_allocator",
+ "log",
+ "mu_pi",
+ "mu_rust_helpers",
+ "patina_debugger",
+ "patina_internal_collections",
+ "patina_internal_cpu",
+ "patina_internal_depex",
+ "patina_internal_device_path",
+ "patina_paging",
+ "patina_performance",
+ "patina_sdk",
+ "patina_test",
+ "r-efi",
+ "scroll",
+ "spin",
+ "uefi_corosensei",
+ "uuid",
+]
+
+[[package]]
+name = "patina_internal_collections"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "c82f18634bd0d6e4a77e4764063b680caa4e65aaa9baf7a71b409b9e20849629"
+dependencies = [
+ "log",
+]
+
+[[package]]
+name = "patina_internal_cpu"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "c343ebac1f05a84e2711e4e235be17b3fff0b07dcab52fffa79d99edad7de40c"
+dependencies = [
+ "arm-gic",
+ "cfg-if",
+ "lazy_static",
+ "log",
+ "mu_pi",
+ "patina_mtrr",
+ "patina_paging",
+ "patina_sdk",
+ "patina_stacktrace",
+ "r-efi",
+ "spin",
+ "x86_64",
+]
+
+[[package]]
+name = "patina_internal_depex"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "b5eda52648641527c0c1661376718945d3720fbe415b3811ac57624e286e9d49"
+dependencies = [
+ "log",
+ "r-efi",
+ "uuid",
+]
+
+[[package]]
+name = "patina_internal_device_path"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "353f92f817f6014e731d7e4c05fe9af855e17c60de8781fa66afcc103005e179"
+dependencies = [
+ "r-efi",
+]
+
+[[package]]
+name = "patina_mtrr"
+version = "1.0.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "daf01b801642167ce79216084bed877b31eaf3778d7a4d99f4458a445ffdca43"
+dependencies = [
+ "bitfield-struct",
+ "cfg-if",
+]
+
+[[package]]
+name = "patina_paging"
+version = "6.0.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "0e1b6dbafed360dfc648f613b7aa69807c54f049d672f8b57d873e1bb2e0788d"
+dependencies = [
+ "bitfield-struct",
+ "bitflags 2.9.1",
  "cfg-if",
  "log",
 ]
 
 [[package]]
-name = "paste"
-version = "1.0.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+name = "patina_performance"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "a47c6c070cf2dc10472cdeabbb0328dd3538df930492943a6191e5f4bcd0e8ef"
+dependencies = [
+ "log",
+ "mu_pi",
+ "mu_rust_helpers",
+ "patina_internal_device_path",
+ "patina_sdk",
+ "r-efi",
+ "scroll",
+ "uuid",
+]
+
+[[package]]
+name = "patina_runtime_services"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "bb4891363decbcb85f0c49dbe43f9a3b66a3e73f14a4db2d997955769a1f68c9"
+dependencies = [
+ "fallible-streaming-iterator",
+ "r-efi",
+]
+
+[[package]]
+name = "patina_samples"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "b7a0051b0c26e1968c41c462e25b5deac57028bf6326b1e61d28457e10598d0f"
+dependencies = [
+ "log",
+ "patina_sdk",
+]
+
+[[package]]
+name = "patina_sdk"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "3d2436975d17d9308415d10bde8a2d6aff9c82df69b6f2ee2f3caa44128b18e3"
+dependencies = [
+ "cfg-if",
+ "fixedbitset",
+ "log",
+ "mu_pi",
+ "patina_boot_services",
+ "patina_driver_binding",
+ "patina_runtime_services",
+ "patina_sdk_macro",
+ "patina_tpl_mutex",
+ "patina_uefi_protocol",
+ "r-efi",
+ "uart_16550",
+ "x86_64",
+]
+
+[[package]]
+name = "patina_sdk_macro"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "aeff881811c7dac503c139b3712c621eb73050ab7848e3473dc479989bbe84ee"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "uuid",
+]
+
+[[package]]
+name = "patina_section_extractor"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "1fad8ce06efdb30540daf35eb16c3b98dc2f334163695f6b41cfc4a27ff9811d"
+dependencies = [
+ "alloc-no-stdlib",
+ "brotli-decompressor",
+ "crc32fast",
+ "log",
+ "mu_pi",
+ "mu_rust_helpers",
+ "patina_sdk",
+ "r-efi",
+]
+
+[[package]]
+name = "patina_stacktrace"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "99b5a09b05f5362ed08266caae180cbd17b1198398dbe25fdf57575b5f111a8f"
+dependencies = [
+ "cfg-if",
+ "log",
+]
+
+[[package]]
+name = "patina_test"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "1161d1f5096d0a20802360e668ca2f5314f4e4cc7a313bd9e5157d6555c04f07"
+dependencies = [
+ "linkme",
+ "log",
+ "patina_sdk",
+ "patina_test_macro",
+]
+
+[[package]]
+name = "patina_test_macro"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "a85f50ed8f832d347a8f05ed34a0f13df9964f93e26a17c40c11ee9cae63fe86"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "patina_tpl_mutex"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "13ba59d55c34723625c0c5d2947dc8a2836a8c44468df685af97f95d0092545b"
+dependencies = [
+ "patina_boot_services",
+ "r-efi",
+]
+
+[[package]]
+name = "patina_uefi_protocol"
+version = "0.1.0"
+source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
+checksum = "bf5f3beaa057afe9c2f4feb5d63f1f4b1a4b7de2dde6a8c899b94feabaa4f632"
+dependencies = [
+ "mu_pi",
+ "r-efi",
+]
 
 [[package]]
 name = "plain"
@@ -430,15 +633,15 @@ dependencies = [
 name = "qemu_dxe_core"
 version = "0.3.1"
 dependencies = [
- "adv_logger",
- "dxe_core",
  "log",
+ "patina_adv_logger",
+ "patina_debugger",
+ "patina_dxe_core",
+ "patina_samples",
+ "patina_sdk",
+ "patina_section_extractor",
+ "patina_stacktrace",
  "r-efi",
- "sample_components",
- "section_extractor",
- "stacktrace",
- "uefi_debugger",
- "uefi_sdk",
  "x86_64",
 ]
 
@@ -473,16 +676,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "runtime_services"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "ec5dc862648c5948f13e13dec23b04aa682d2e69c1731b20c2856a28d9fd4c8c"
-dependencies = [
- "fallible-streaming-iterator",
- "r-efi",
-]
-
-[[package]]
 name = "rustc_version"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -496,16 +689,6 @@ name = "rustversion"
 version = "1.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eded382c5f5f786b989652c49544c4877d9f015cc22e145a5ea8ea66c2921cd2"
-
-[[package]]
-name = "sample_components"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "32024186637be20bf27bed489db92f6cbe593147a2e70f36a86c2202ad49ea2b"
-dependencies = [
- "log",
- "uefi_sdk",
-]
 
 [[package]]
 name = "scopeguard"
@@ -531,22 +714,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "section_extractor"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "06f8fe345bb61f3a718c32a6fd59728beddb2a8fda024a2f5d5a527f58a4a904"
-dependencies = [
- "alloc-no-stdlib",
- "brotli-decompressor",
- "crc32fast",
- "log",
- "mu_pi",
- "mu_rust_helpers",
- "r-efi",
- "uefi_sdk",
 ]
 
 [[package]]
@@ -591,16 +758,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b9eb1a2f4c41445a3a0ff9abc5221c5fcd28e1f13cd7c0397706f9ac938ddb0"
 dependencies = [
  "lock_api",
-]
-
-[[package]]
-name = "stacktrace"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "400566a8a8afbb927118c5a5a12f86c9d44740ac88346ab670bb5783aba1d96c"
-dependencies = [
- "cfg-if",
- "log",
 ]
 
 [[package]]
@@ -658,33 +815,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b9e2fdb3a1e862c0661768b7ed25390811df1947a8acbfbefe09b47078d93c4"
 
 [[package]]
-name = "tpl_mutex"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "4e92bb87f11eba59fd164de8861ee957cf0be8ad568d5d598aa5c8547196d7a9"
-dependencies = [
- "boot_services",
- "r-efi",
-]
-
-[[package]]
 name = "uart_16550"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e492212ac378a5e00da953718dafb1340d9fbaf4f27d6f3c5cab03d931d1c049"
 dependencies = [
- "bitflags 2.9.0",
+ "bitflags 2.9.1",
  "rustversion",
  "x86",
-]
-
-[[package]]
-name = "uefi_collections"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "71c356f41b6c7497e8927c95192a06ea5dd73713f54d67a132691b2142d63064"
-dependencies = [
- "log",
 ]
 
 [[package]]
@@ -696,144 +834,6 @@ dependencies = [
  "autocfg",
  "cfg-if",
  "scopeguard",
-]
-
-[[package]]
-name = "uefi_cpu"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "c5c361d68e8d110153d5d6d4669cff2b8860aa650a968d6acbf14b69e877a0b0"
-dependencies = [
- "arm-gic",
- "cfg-if",
- "lazy_static",
- "log",
- "mtrr",
- "mu_pi",
- "paging",
- "r-efi",
- "spin",
- "stacktrace",
- "uefi_sdk",
- "x86_64",
-]
-
-[[package]]
-name = "uefi_debugger"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "e82db243df7d414aa947cefe1e5d77da6307f7750420e9476c9a4a99949dad9e"
-dependencies = [
- "bitfield-struct",
- "cfg-if",
- "gdbstub",
- "log",
- "paging",
- "spin",
- "uefi_cpu",
- "uefi_sdk",
-]
-
-[[package]]
-name = "uefi_depex"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "5f0ad10f35d8c1d07abd5ac07b121b596e7a1f34a4e3ee0e226ff1b668c74ea1"
-dependencies = [
- "log",
- "r-efi",
- "uuid",
-]
-
-[[package]]
-name = "uefi_device_path"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "4bff7ab6be9014c6f97d194b4faf502146fba538ab85b67fb6f8ea3771241bbe"
-dependencies = [
- "r-efi",
-]
-
-[[package]]
-name = "uefi_performance"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "40b53a4ac319608b96ca78af445d955af1011ef74d421e21e565f5cf216e7cc7"
-dependencies = [
- "log",
- "mu_pi",
- "mu_rust_helpers",
- "r-efi",
- "scroll",
- "uefi_device_path",
- "uefi_sdk",
- "uuid",
-]
-
-[[package]]
-name = "uefi_protocol"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "f6031b0fffc70063bd1f18a9e3eac4e1e58940124570a8736578443fefda5411"
-dependencies = [
- "mu_pi",
- "r-efi",
-]
-
-[[package]]
-name = "uefi_sdk"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "ad29cdf9c21e7597dacfaae8df09d5f3e8e4a735a3faaa497cacffaa4a5cbe9f"
-dependencies = [
- "boot_services",
- "cfg-if",
- "driver_binding",
- "fixedbitset",
- "log",
- "mu_pi",
- "r-efi",
- "runtime_services",
- "tpl_mutex",
- "uart_16550",
- "uefi_protocol",
- "uefi_sdk_macro",
- "x86_64",
-]
-
-[[package]]
-name = "uefi_sdk_macro"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "43db003344a06c3429de0691b215b1352f4e71ee923b481bf0fa95cfd07ed073"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
- "uuid",
-]
-
-[[package]]
-name = "uefi_test"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "46e42b44630f894498ec3cf5fa936ae09242a7d42e1538fa9a301270cc1fdf9f"
-dependencies = [
- "linkme",
- "log",
- "uefi_sdk",
- "uefi_test_macro",
-]
-
-[[package]]
-name = "uefi_test_macro"
-version = "15.1.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "1bcd08600515a6f30db75498c48ae7ed590e3526c93b6ce5da643ef76f9a9578"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
@@ -881,7 +881,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0f042214de98141e9c8706e8192b73f56494087cc55ebec28ce10f26c5c364ae"
 dependencies = [
  "bit_field",
- "bitflags 2.9.0",
+ "bitflags 2.9.1",
  "rustversion",
  "volatile",
 ]

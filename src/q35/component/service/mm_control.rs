@@ -10,11 +10,11 @@
 //!
 #![cfg(all(target_os = "uefi", target_arch = "x86_64"))]
 
-use uefi_sdk::component::config::mm::MmCommunicationConfiguration;
-use uefi_sdk::component::service::platform_mm_control::PlatformMmControl;
+use patina_sdk::component::config::mm::MmCommunicationConfiguration;
+use patina_sdk::component::service::platform_mm_control::PlatformMmControl;
 
 use crate::q35::registers as register;
-use uefi_sdk::component::{service::IntoService, IntoComponent, Storage};
+use patina_sdk::component::{service::IntoService, IntoComponent, Storage};
 
 use x86_64::instructions::port::Port;
 
@@ -41,7 +41,7 @@ impl QemuQ35PlatformMmControl {
     ///
     /// Installs an instance of the `PlatformMmControl` service that can be invoked by other components that depend
     /// upon hardware initialization for MMI control.
-    pub fn entry_point(mut self, storage: &mut Storage) -> uefi_sdk::error::Result<()> {
+    pub fn entry_point(mut self, storage: &mut Storage) -> patina_sdk::error::Result<()> {
         log::debug!("Platform MM Control Entry Point");
 
         self.inner_config = storage
@@ -60,7 +60,7 @@ impl PlatformMmControl for QemuQ35PlatformMmControl {
     /// Initializes QEMU Q35 for Management Mode (MM).
     ///
     /// After this function completes, the platform hardware enabling required to support MMIs is completed.
-    fn init(&self) -> uefi_sdk::error::Result<()> {
+    fn init(&self) -> patina_sdk::error::Result<()> {
         log::debug!("Performing platform-specific MM init...");
 
         let mut smi_en_port =
@@ -82,7 +82,7 @@ impl PlatformMmControl for QemuQ35PlatformMmControl {
 
         // Set the SMI Lock bit in the PM1A_CNT register to lock the SMI_EN bits
         let pm1a_cnt: *mut u16 = (register::PCI_EXPRESS_BASE_ADDRESS as usize
-            + uefi_sdk::pci_address!(0, 0x1F, 0, register::ich9::GEN_PMCON_1) as usize)
+            + patina_sdk::pci_address!(0, 0x1F, 0, register::ich9::GEN_PMCON_1) as usize)
             as *mut u16;
         let mut pm1a_cnt_val: u16 = unsafe { core::ptr::read_volatile(pm1a_cnt) };
         pm1a_cnt_val |= register::ich9::GEN_PMCON_1_SMI_LOCK;

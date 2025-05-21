@@ -10,15 +10,15 @@
 #![no_std]
 #![no_main]
 
-use adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use core::{ffi::c_void, panic::PanicInfo};
-use dxe_core::Core;
+use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
+use patina_dxe_core::Core;
+use patina_samples as sc;
+use patina_sdk::component::config as uefi_sdk_configs;
+use patina_sdk::component::service as uefi_sdk_services;
+use patina_sdk::{log::Format, serial::uart::Uart16550};
+use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
-use sample_components as sc;
-use stacktrace::StackTrace;
-use uefi_sdk::component::config as uefi_sdk_configs;
-use uefi_sdk::component::service as uefi_sdk_services;
-use uefi_sdk::{log::Format, serial::uart::Uart16550};
 extern crate alloc;
 use alloc::vec;
 
@@ -30,8 +30,8 @@ fn panic(info: &PanicInfo) -> ! {
         log::error!("StackTrace: {}", err);
     }
 
-    if uefi_debugger::enabled() {
-        uefi_debugger::breakpoint();
+    if patina_debugger::enabled() {
+        patina_debugger::breakpoint();
     }
 
     loop {}
@@ -50,8 +50,8 @@ static LOGGER: AdvancedLogger<Uart16550> = AdvancedLogger::new(
     Uart16550::Io { base: 0x402 },
 );
 
-static DEBUGGER: uefi_debugger::UefiDebugger<Uart16550> =
-    uefi_debugger::UefiDebugger::new(Uart16550::Io { base: 0x3F8 })
+static DEBUGGER: patina_debugger::UefiDebugger<Uart16550> =
+    patina_debugger::UefiDebugger::new(Uart16550::Io { base: 0x3F8 })
         .with_default_config(false, true, 0)
         .with_debugger_logging();
 
@@ -61,12 +61,12 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     let adv_logger_component = AdvancedLoggerComponent::<Uart16550>::new(&LOGGER);
     adv_logger_component.init_advanced_logger(physical_hob_list).unwrap();
 
-    uefi_debugger::set_debugger(&DEBUGGER);
+    patina_debugger::set_debugger(&DEBUGGER);
 
     log::info!("DXE Core Platform Binary v{}", env!("CARGO_PKG_VERSION"));
 
     Core::default()
-        .with_section_extractor(section_extractor::CompositeSectionExtractor::default())
+        .with_section_extractor(patina_section_extractor::CompositeSectionExtractor::default())
         .init_memory(physical_hob_list) // We can make allocations now!
         .with_config(sc::Name("World")) // Config knob for sc::log_hello
         .with_component(adv_logger_component)
