@@ -41,12 +41,11 @@ static LOGGER: AdvancedLogger<Uart16550> = AdvancedLogger::new(
     Format::Standard,
     &[
         ("goblin", log::LevelFilter::Off),
-        ("uefi_depex", log::LevelFilter::Off),
         ("gcd_measure", log::LevelFilter::Off),
         ("allocations", log::LevelFilter::Off),
         ("efi_memory_map", log::LevelFilter::Off),
     ],
-    log::LevelFilter::Trace,
+    log::LevelFilter::Info,
     Uart16550::Io { base: 0x402 },
 );
 

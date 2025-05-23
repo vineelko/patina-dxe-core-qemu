@@ -36,12 +36,11 @@ static LOGGER: AdvancedLogger<UartPl011> = AdvancedLogger::new(
     Format::Standard,
     &[
         ("goblin", log::LevelFilter::Off),
-        ("uefi_depex", log::LevelFilter::Off),
         ("gcd_measure", log::LevelFilter::Off),
         ("allocations", log::LevelFilter::Off),
         ("efi_memory_map", log::LevelFilter::Off),
     ],
-    log::LevelFilter::Trace,
+    log::LevelFilter::Info,
     UartPl011::new(0x6000_0000),
 );
 
