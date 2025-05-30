@@ -14,8 +14,6 @@ use core::{ffi::c_void, panic::PanicInfo};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::Core;
 use patina_samples as sc;
-use patina_sdk::component::config as uefi_sdk_configs;
-use patina_sdk::component::service as uefi_sdk_services;
 use patina_sdk::{log::Format, serial::uart::Uart16550};
 use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
@@ -73,16 +71,16 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_component(sc::HelloStruct("World")) // Example of a struct component
         .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
         .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)
-        .with_config(uefi_sdk_configs::mm::MmCommunicationConfiguration {
-            acpi_base: uefi_sdk_configs::mm::AcpiBase::Mmio(0x0), // Actual ACPI base address will be set during boot
-            cmd_port: uefi_sdk_configs::mm::MmiPort::Smi(0xB2),
-            data_port: uefi_sdk_configs::mm::MmiPort::Smi(0xB3),
+        .with_config(patina_mm::config::MmCommunicationConfiguration {
+            acpi_base: patina_mm::config::AcpiBase::Mmio(0x0), // Actual ACPI base address will be set during boot
+            cmd_port: patina_mm::config::MmiPort::Smi(0xB2),
+            data_port: patina_mm::config::MmiPort::Smi(0xB3),
             comm_buffers: vec![],
         })
         .with_component(q35_services::mm_config_provider::MmConfigurationProvider)
         .with_component(q35_services::mm_control::QemuQ35PlatformMmControl::new())
-        .with_component(uefi_sdk_services::sw_mmi_manager::SwMmiManager::new())
-        .with_component(uefi_sdk_services::mm_communicator::MmCommunicator::new())
+        .with_component(patina_mm::component::sw_mmi_manager::SwMmiManager::new())
+        .with_component(patina_mm::component::communicator::MmCommunicator::new())
         .with_component(q35_services::mm_test::QemuQ35MmTest::new())
         .start()
         .unwrap();

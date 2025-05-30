@@ -10,8 +10,8 @@
 //!
 #![cfg(all(target_os = "uefi", target_arch = "x86_64"))]
 
-use patina_sdk::component::config::mm::MmCommunicationConfiguration;
-use patina_sdk::component::service::platform_mm_control::PlatformMmControl;
+use patina_mm::config::MmCommunicationConfiguration;
+use patina_mm::service::platform_mm_control::PlatformMmControl;
 
 use crate::q35::registers as register;
 use patina_sdk::component::{IntoComponent, Storage, service::IntoService};

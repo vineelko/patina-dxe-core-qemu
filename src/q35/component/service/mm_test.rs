@@ -10,10 +10,9 @@
 //! SPDX-License-Identifier: BSD-2-Clause-Patent
 //!
 
-use patina_sdk::component::service::mm_communicator::MmCommunication;
-use r_efi::efi;
-
+use patina_mm::service::MmCommunication;
 use patina_sdk::component::{IntoComponent, service::Service};
+use r_efi::efi;
 
 /// MM Supervisor Request Header
 ///

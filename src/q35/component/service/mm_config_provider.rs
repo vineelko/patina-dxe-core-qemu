@@ -9,9 +9,9 @@
 //! SPDX-License-Identifier: BSD-2-Clause-Patent
 //!
 
+use patina_mm::config::{CommunicateBuffer, MmCommunicationConfiguration};
 use patina_sdk::component::{
     IntoComponent,
-    config::mm::{CommunicateBuffer, MmCommunicationConfiguration},
     hob::{FromHob, Hob},
     params::ConfigMut,
 };
