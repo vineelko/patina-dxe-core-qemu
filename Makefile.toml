@@ -197,7 +197,7 @@ if ${needs_patch}
 
         for package in ${packages}
             name = map_get ${package} name
-            echo "Processing package: ${name}"
+            echo "  Processing package: ${name}"
 
             # The current version of the crate in the local workspace
             local_version = get_version ${name} ${local_packages}
