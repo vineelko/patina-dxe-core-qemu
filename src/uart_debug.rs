@@ -8,21 +8,31 @@
 //!
 //! SPDX-License-Identifier: BSD-2-Clause-Patent
 //! 
+
 use patina_sdk::serial::SerialIO;
 
 ///
 /// Constants for UART registers
 /// 
+
 const THR_REGISTER_OFFSET: usize = 0x00;
 const LSR_REGISTER_OFFSET: usize = 0x14;
 const LSR_TEMPT: u8 = 0x40;
 const LSR_TXRDY: u8 = 0x20;
 const LSR_RXRDY: u8 = 0x01;
 
+///
+/// Uart module
+/// 
+
 #[derive(Debug)]
 pub struct Uart {
     base_address: usize,
 }
+
+///
+/// Uart functions implementation
+/// 
 
 impl Uart {
     pub const fn new(base_address: usize) -> Self {
@@ -57,6 +67,10 @@ impl Uart {
         }
     }
 }
+
+///
+/// Implementation of patina_sdk::serial::SerialIO trait
+/// 
 
 impl SerialIO for Uart {
     fn init(&self) {}
