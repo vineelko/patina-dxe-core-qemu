@@ -31,7 +31,3 @@ license = "BSD-2-Clause-Patent"
 
 [profile.test]
   opt-level = 0
-
-[features]
-  default = []
-  aarch64 = []
