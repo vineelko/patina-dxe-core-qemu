@@ -240,10 +240,10 @@ end
 if ${needs_patch}
     # Create a backup to revert to
     cp Cargo.toml Cargo.toml.bak
+    cp Cargo.lock Cargo.lock.bak
 
     # Patch the Cargo.toml file
     appendfile Cargo.toml ${patch_str}
-    exec cargo update
 end
 
 # Execute the actual cargo command
@@ -252,7 +252,7 @@ exit_code = exec --get-exit-code cargo make build-efi
 if ${needs_patch}
     # Revert the Cargo.toml file to the original state
     mv Cargo.toml.bak Cargo.toml
-    exec cargo update
+    mv Cargo.lock.bak Cargo.lock
 end
 
 exit ${exit_code}
