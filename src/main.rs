@@ -10,7 +10,7 @@
 #![no_main]
 
 use core::{ffi::c_void, panic::PanicInfo};
-use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
+use patina_adv_logger::logger::AdvancedLogger;
 use patina_dxe_core::{Core, GicBases};
 mod uart_debug;
 
@@ -53,27 +53,36 @@ static LOGGER: AdvancedLogger<uart_debug::Uart> = AdvancedLogger::new(
     uart_debug::Uart::new(UART_BASE),
 );
 
-static DEBUGGER: patina_debugger::UefiDebugger<uart_debug::Uart> =
-    patina_debugger::UefiDebugger::new(uart_debug::Uart::new(UART_BASE))
-    .with_default_config(false, true, 0);
 
 ///
 ///  Primary entry point for the DXE Core
 /// 
 
+
+
+pub fn hack_tag(idx: usize) {
+    let hack = uart_debug::Uart::new(UART_BASE);
+    hack.write_byte(b'X');
+    hack.write_byte(b'X');
+    hack.write_byte(b'X');
+    hack.write_byte(b'_');
+    hack.write_byte(b'0' + (idx % 10) as u8);
+    hack.write_byte(b'\n');
+}
+
+
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
+
+
+    hack_tag(1);
+
 
     // Implement logger
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(log::LevelFilter::Trace))
         .unwrap();
-    let adv_logger_component = AdvancedLoggerComponent::<uart_debug::Uart>::new(&LOGGER);
-    adv_logger_component
-        .init_advanced_logger(physical_hob_list)
-        .unwrap();
 
-    patina_debugger::set_debugger(&DEBUGGER);
 
     log::info!("Rust DXE Core entry ...");
 
@@ -82,7 +91,6 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_section_extractor(patina_section_extractor::CompositeSectionExtractor::default())
         .init_memory(physical_hob_list) // We can make allocations now!
         .with_config(GicBases::new(GIC_DISTRIBUTOR_BASE, GIC_REDISTRIBUTORS_BASE))
-        .with_component(adv_logger_component)
         .start()
         .unwrap();
 

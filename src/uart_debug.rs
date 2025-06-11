@@ -39,7 +39,7 @@ impl Uart {
         Self { base_address }
     }
 
-    fn write_byte(&self, byte: u8) {
+    pub fn write_byte(&self, byte: u8) {
         while self.read_register(LSR_REGISTER_OFFSET) & (LSR_TEMPT | LSR_TXRDY) != (LSR_TEMPT | LSR_TXRDY) { }
         self.write_register(THR_REGISTER_OFFSET, byte);
     }
