@@ -44,12 +44,12 @@ fn panic(info: &PanicInfo) -> ! {
 static LOGGER: AdvancedLogger<uart_debug::Uart> = AdvancedLogger::new(
     patina_sdk::log::Format::Standard,
     &[
-        ("goblin", log::LevelFilter::Off),
-        ("gcd_measure", log::LevelFilter::Off),
-        ("allocations", log::LevelFilter::Off),
-        ("efi_memory_map", log::LevelFilter::Off),
+        ("goblin", log::LevelFilter::Info),
+        ("gcd_measure", log::LevelFilter::Info),
+        ("allocations", log::LevelFilter::Info),
+        ("efi_memory_map", log::LevelFilter::Info),
     ],
-    log::LevelFilter::Trace,
+    log::LevelFilter::Info,
     uart_debug::Uart::new(UART_BASE),
 );
 
@@ -66,7 +66,7 @@ pub fn hack_tag(idx: usize) {
     hack.write_byte(b'X');
     hack.write_byte(b'X');
     hack.write_byte(b'_');
-    hack.write_byte(b'0' + (idx % 10) as u8);
+    hack.write_byte(b'0' + idx as u8);
     hack.write_byte(b'\n');
 }
 
