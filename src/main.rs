@@ -58,19 +58,6 @@ static LOGGER: AdvancedLogger<uart_debug::Uart> = AdvancedLogger::new(
 ///  Primary entry point for the DXE Core
 /// 
 
-
-
-pub fn hack_tag(idx: usize) {
-    let hack = uart_debug::Uart::new(UART_BASE);
-    hack.write_byte(b'X');
-    hack.write_byte(b'X');
-    hack.write_byte(b'X');
-    hack.write_byte(b'_');
-    hack.write_byte(b'0' + idx as u8);
-    hack.write_byte(b'\n');
-}
-
-
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
 
@@ -99,3 +86,17 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     loop {}
 }
 
+
+
+
+
+
+pub fn hack_tag(idx: usize) {
+    let hack = uart_debug::Uart::new(UART_BASE);
+    hack.write_byte(b'X');
+    hack.write_byte(b'X');
+    hack.write_byte(b'X');
+    hack.write_byte(b'_');
+    hack.write_byte(b'0' + idx as u8);
+    hack.write_byte(b'\n');
+}
