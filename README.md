@@ -7,9 +7,11 @@ Rust DXE Core binary that can be used in a QEMU UEFI firmware build.
 
 Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA for aarch64 architecture.
 
+## Building
+
 To build an executable, this repo uses the same compiler setup steps that are used in the patina project
 [readme.md file build section](https://github.com/OpenDevicePartnership/patina#Build).  Once the compiler is installed,
-executing cargo make will create a DXE core .EFI file that is a replacement for the dxe core driver in the
+executing cargo make will create a DXE core .EFI file that can be used as a replacement for the dxe core driver in the
 [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
 
 - Q35 (x64) debug
@@ -40,25 +42,19 @@ executing cargo make will create a DXE core .EFI file that is a replacement for 
    Output File:      'target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi'
    ```
 
-## Working with Local Dependencies
+## Size Comparison
 
-If working with local dependencies outside of this repository, such as making changes in [Patina](https://github.com/OpenDevicePartnership/patina)
-that you wish to compile into one of the qemu binaries in this repository, then simply add the path to the local
-repository to the command line, and the build tools will automatically patch in all crates in that repository for that
-build.
+The code in both C and Rust modules is always changing and depending on compression used, size comparisons between the
+Rust and C modules can be difficult.  But to give a general idea where current development stands, this Q35 build was
+compiled both as debug and release, then compared to a Q35 build that contains the normal C based DXE core.  Note
+the Rust core includes performance tracing and support normally provided by the CpuDxe and RuntimeDxe drivers, so that
+was included in the size comparison.
 
-``` cmd
-> cargo make q35 C:\\src\\patina\\
-> cargo make sbsa C:/src/patina C:/src/patina-paging
-```
+![DXE Core Build Size Comparison](./docs/images/Size_Comparison_Screenshot.png)
 
-**IMPORTANT**: This tool temporarily adds the patches to the Cargo.toml, so you must meet Cargo.toml expectations
-with the path that you define. That is to say, if you are providing windows pathing, you must use double slashes
-(`\\`).
+## NuGet Publishing
 
-## NuGet Publishing Instructions
-
-The NuGet package is currently published to the public [Patina QEMU DXE Core](https://dev.azure.com/patina-fw/artifacts/_artifacts/feed/qemu-dxe-core)
-feed where it is consumed in the [Patina QEMU](https://github.com/OpenDevicePartnership/patina-qemu) repository.
-
-The NuGet is built and published using a GitHub workflow in [Patina QEMU DXE Core Actions](https://github.com/OpenDevicePartnership/patina-dxe-core-qemu/actions).
+This repository has a GitHub action to build and publish the output .EFI files to a public NuGet package feed
+[qemu-dxe-core](https://dev.azure.com/patina-fw/artifacts/_artifacts/feed/qemu-dxe-core).  That feed is then consumed
+by the [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) repository to demonstrate a UEFI
+build that uses the Rust DXE core driver.
