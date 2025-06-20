@@ -11,7 +11,7 @@ Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA f
 
 To build an executable, this repo uses the same compiler setup steps that are used in the patina project
 [readme.md file build section](https://github.com/OpenDevicePartnership/patina#Build).  Once the compiler is installed,
-executing cargo make will create a DXE core .EFI file that can be used as a replacement for the dxe core driver in the
+executing cargo make will create a DXE core .EFI file that can be used as a replacement for the Patina DXE Core EFI binary in the
 [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
 
 - Q35 (x64) debug
