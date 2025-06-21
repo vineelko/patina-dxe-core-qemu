@@ -11,8 +11,8 @@ Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA f
 
 To build an executable, this repo uses the same compiler setup steps that are used in the patina project
 [readme.md file build section](https://github.com/OpenDevicePartnership/patina#Build).  Once the compiler is installed,
-executing cargo make will create a DXE core .EFI file that can be used as a replacement for the Patina DXE Core EFI binary in the
-[patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
+executing cargo make will create a DXE core .EFI file that can be used as a replacement for the Patina DXE Core EFI
+binary in the [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu) UEFI build.
 
 - Q35 (x64) debug
 
@@ -44,13 +44,31 @@ executing cargo make will create a DXE core .EFI file that can be used as a repl
 
 ## Size Comparison
 
-The code in both C and Rust modules is always changing and depending on the compression algorithm used, size comparisons between the
-Rust and C modules can be difficult.  But to give a general idea where current development stands, this Q35 build was
-compiled both as debug and release, then compared to a Q35 build that contains the normal C based DXE core.  Note
-the Rust core includes performance tracing and support normally provided by the CpuDxe and RuntimeDxe drivers, so that
-was included in the size comparison.
+The code in both the C and Rust modules is always changing and depending on the compression algorithm used, size comparisons
+can be difficult.  But to give a general idea where current development stands, this repository Q35 build was compiled
+both as debug and release, then compared to a Q35 build that contains the normal C based DXE core.
 
-![DXE Core Build Size Comparison](./docs/images/Size_Comparison_Screenshot.png)
+The Patina DXE Core does include support for performance tracing and features that are normally provided by the CpuDxe and
+RuntimeDxe drivers.  So the Tiano DXE Core size entries below include compiling with performance tracing enabled and
+include the size of the CpuDxe and RuntimeDxe drivers.
+
+### Release Builds
+
+| Compression | Tiano DXE Core Size | Patina DXE Core Size | Difference |
+|:---:|:---:|:---:|:---:|
+| None | 423,424 | 784,384 | 352.5 KB (185.2%) |
+| Tiano | 133,847 | 365,086 | 225.8 KB (272.7%) |
+| Lzma | 118,807 | 314,775 | 191.4 KB (264.9%) |
+| Brotli | 120,721 | 301,069 | 176.1 KB (249.4%) |
+
+### Debug Builds
+
+| Compression | Tiano DXE Core Size | Patina DXE Core Size | Difference |
+|:---:|:---:|:---:|:---:|
+| None | 368,128 | 1,619,456 | 1222.0 KB (439.92%) |
+| Tiano | 187,076 | 603,400 | 406.6 KB (322.54%) |
+| Lzma | 164,637 | 496,764 | 324.3 KB (301.73%) |
+| Brotli | 166,570 | 487,425 | 313.3 KB (292.6%) |
 
 ## NuGet Publishing
 
