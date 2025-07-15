@@ -7,6 +7,14 @@ Rust DXE Core binary that can be used in a QEMU UEFI firmware build.
 
 Currently, two QEMU platforms are supported, Q35 for x64 architecture and SBSA for aarch64 architecture.
 
+## Documentation
+
+The documentation in this repo can be generated with the following commands:
+
+- `cargo make doc` - This will build the documentation for all packages in the workspace.
+- `cargo make doc-open` - This will build the documentation for all packages in the workspace and open it in a
+  web browser.
+
 ## Building
 
 To build an executable, this repo uses the same compiler setup steps that are used in the patina project
