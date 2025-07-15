@@ -51,6 +51,7 @@ struct MmSupervisorVersionInfo {
 pub struct QemuQ35MmTest;
 
 impl QemuQ35MmTest {
+    /// Creates a new instance of the QEMU Q35 MM Test component.
     pub fn new() -> Self {
         Self
     }
