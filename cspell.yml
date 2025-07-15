@@ -9,19 +9,13 @@
 version: "0.2"
 language: en
 dictionaries:
-  - "companies"
-  - "cpp"
-  - "cpp-legacy"
-  - "java"
-  - "python"
   - "rust"
-  - "softwareTerms"
 ignorePaths:
   - "**/target/**"
   - "**/book/**"
   - "**/contributors.md"
   - "docs/mermaid.min.js"
-ignoreRegExpList: ["/0x[0-9a-fA-F]+/"]
+ignoreRegExpList: ["/0x[0-9a-fA-F]+/", ".*asm!\\(.*?\\);"]
 minWordLength: 4
 caseSensitive: false
 allowCompoundWords: true
@@ -30,18 +24,28 @@ words:
   - apmc
   - depex
   - dxecore
+  - efiapi
+  - gdbstub
   - keccak
+  - lzma
   - mdbook
   - mmio
   - mmram
   - msuefi
   - pdata
+  - pdbaltpath
+  - pemfile
   - pmbase
   - pmcon
   - pytool
+  - repr
   - rustc
+  - rustls
   - sbsa
   - supv
+  - tiano
+  - uart
   - uefi
+  - webpki
   - zbuild
   - zunstable
