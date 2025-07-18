@@ -570,7 +570,7 @@ dependencies = [
 
 [[package]]
 name = "qemu_dxe_core"
-version = "0.4.0"
+version = "1.0.0"
 dependencies = [
  "log",
  "patina_adv_logger",
