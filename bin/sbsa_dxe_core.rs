@@ -16,6 +16,7 @@ use patina_dxe_core::{Core, GicBases};
 use patina_samples as sc;
 use patina_sdk::{log::Format, serial::uart::UartPl011};
 use patina_stacktrace::StackTrace;
+use patina_smbios as smbios;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -67,6 +68,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_component(sc::HelloStruct("World")) // Example of a struct component
         .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
         .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)
+        .with_component(smbios::SmbiosProviderManager("Hello from SMBIOS driver"))
         .start()
         .unwrap();
 
