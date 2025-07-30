@@ -61,10 +61,6 @@ static LOGGER: AdvancedLogger<uart_debug::Uart> = AdvancedLogger::new(
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
 
-
-    hack_tag(1);
-
-
     // Implement logger
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(log::LevelFilter::Trace))
@@ -86,17 +82,3 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     loop {}
 }
 
-
-
-
-
-
-pub fn hack_tag(idx: usize) {
-    let hack = uart_debug::Uart::new(UART_BASE);
-    hack.write_byte(b'X');
-    hack.write_byte(b'X');
-    hack.write_byte(b'X');
-    hack.write_byte(b'_');
-    hack.write_byte(b'0' + idx as u8);
-    hack.write_byte(b'\n');
-}
