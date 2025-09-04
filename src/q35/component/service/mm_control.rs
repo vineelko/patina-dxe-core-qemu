@@ -6,7 +6,7 @@
 //!
 //! Copyright (C) Microsoft Corporation.
 //!
-//! SPDX-License-Identifier: BSD-2-Clause-Patent
+//! SPDX-License-Identifier: Apache-2.0
 //!
 #![cfg(all(target_os = "uefi", target_arch = "x86_64", feature = "x64"))]
 
