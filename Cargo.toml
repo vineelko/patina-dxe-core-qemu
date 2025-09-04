@@ -62,4 +62,4 @@ doc = []
 std = []
 
 [patch.patina-fw]
-patina_smbios = { path = "/home/katperez/r/patina/components/patina_smbios" }
+patina_smbios = { path = "PATINA_TIANOCORE_DEV\patina-smbios" }
