@@ -30,12 +30,15 @@ patina_performance = { version = "6", registry = "patina-fw"}
 patina_samples = { version = "6", registry = "patina-fw" }
 patina_sdk = { version = "6", registry = "patina-fw", features = ["enable_patina_tests"] }
 patina_section_extractor = { version = "6", registry = "patina-fw" }
-patina_smbios = { version = "6", registry = "patina-fw" }
 patina_stacktrace = { version = "6", registry = "patina-fw" }
 r-efi = { version = "^5", default-features = false }
 x86_64 = { version = "=0.15.2", default-features = false, features = [
   "instructions"
 ], optional = true }
+
+patina_smbios = { path = "PATINA_TIANOCORE_DEV/patina-smbios" }
+# TBD: patina_smbios = { version = "6", registry = "patina-fw" }
+
 
 # These release settings reduce the qemu binary size significantly(~35%).
 [profile.release]
@@ -60,6 +63,3 @@ x64 = ["x86_64"]
 aarch64 = []
 doc = []
 std = []
-
-[patch.patina-fw]
-patina_smbios = { path = "PATINA_TIANOCORE_DEV\patina-smbios" }
