@@ -14,11 +14,41 @@ use core::{ffi::c_void, panic::PanicInfo};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::Core;
 use patina_samples as sc;
-use patina_sdk::{log::Format, serial::uart::Uart16550};
+use patina_sdk::{
+    component::params::Config,
+    error::EfiError,
+    log::Format,
+    serial::{SerialIO, uart::Uart16550},
+};
 use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
 extern crate alloc;
 use alloc::vec;
+
+// pub fn serial_echo<S: SerialIO>(serial: Config<S>) -> Result<(), EfiError> {
+//     log::info!("Starting serial echo!");
+//     loop {
+//         let byte = serial.read();
+//         serial.write(byte);
+//     }
+// }
+
+use patina_sdk::component::IntoComponent;
+
+#[derive(IntoComponent)]
+struct SerialEcho {
+    serial: &'static dyn SerialIO,
+}
+
+impl SerialEcho {
+    fn entry_point(self) -> Result<(), EfiError> {
+        log::info!("Starting serial echo!");
+        loop {
+            let byte = self.serial.read();
+            self.serial.write(&[byte]);
+        }
+    }
+}
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -52,6 +82,8 @@ static DEBUGGER: patina_debugger::PatinaDebugger<Uart16550> =
         .with_force_enable(false)
         .with_log_policy(patina_debugger::DebuggerLoggingPolicy::FullLogging);
 
+static SERIAL_TEST: Uart16550 = Uart16550::Io { base: 0x3F8 };
+
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     log::set_logger(&LOGGER).map(|()| log::set_max_level(log::LevelFilter::Trace)).unwrap();
@@ -66,6 +98,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .init_memory(physical_hob_list) // We can make allocations now!
         .with_config(sc::Name("World")) // Config knob for sc::log_hello
         .with_service(patina_ffs_extractors::CompositeSectionExtractor::default())
+        .with_component(SerialEcho { serial: &SERIAL_TEST })
         .with_component(adv_logger_component)
         .with_component(sc::log_hello) // Example of a function component
         .with_component(sc::HelloStruct("World")) // Example of a struct component
