@@ -36,8 +36,10 @@ x86_64 = { version = "=0.15.2", default-features = false, features = [
   "instructions"
 ], optional = true }
 
-patina_smbios = {git = "https://github.com/OpenDevicePartnership/patina-smbios.git", branch = "main"}
+#patina_smbios = {git = "https://github.com/OpenDevicePartnership/patina-smbios.git", branch = "main"}
 # TODO: patina_smbios = { version = "?", registry = "patina-fw" }
+
+patina_smbios = { path = "../patina/components/patina_smbios" }
 
 
 # These release settings reduce the qemu binary size significantly(~35%).
