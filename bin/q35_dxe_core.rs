@@ -15,8 +15,10 @@ use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogg
 use patina_dxe_core::Core;
 use patina_samples as sc;
 use patina_sdk::{log::Format, serial::uart::Uart16550};
+use patina_section_extractor::CompositeSectionExtractor;
 use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
+use patina_smbios::component::SmbiosProviderManager;
 extern crate alloc;
 use alloc::vec;
 
@@ -63,12 +65,12 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     log::info!("DXE Core Platform Binary v{}", env!("CARGO_PKG_VERSION"));
 
     Core::default()
-        .with_section_extractor(patina_section_extractor::CompositeSectionExtractor::default())
+        .with_section_extractor(CompositeSectionExtractor::default())
         .init_memory(physical_hob_list) // We can make allocations now!
         .with_config(sc::Name("World")) // Config knob for sc::log_hello
         .with_component(adv_logger_component)
         .with_component(sc::log_hello) // Example of a function component
-        .with_component(sc::HelloStruct("World")) // Example of a struct component
+        .with_component(sc::HelloStruct("Kat Perez")) // Example of a struct component
         .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
         .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)
         .with_config(patina_mm::config::MmCommunicationConfiguration {
@@ -82,6 +84,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_component(patina_mm::component::sw_mmi_manager::SwMmiManager::new())
         .with_component(patina_mm::component::communicator::MmCommunicator::new())
         .with_component(q35_services::mm_test::QemuQ35MmTest::new())
+    .with_component(SmbiosProviderManager)
         .with_config(patina_performance::config::PerfConfig {
             enable_component: true,
             enabled_measurements: {
@@ -93,7 +96,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
             },
         })
         .with_component(patina_performance::component::performance_config_provider::PerformanceConfigurationProvider)
-        .with_component(patina_performance::component::performance::Performance)
+    .with_component(patina_performance::component::performance::Performance)
         .start()
         .unwrap();
 
