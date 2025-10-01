@@ -15,7 +15,7 @@ ignorePaths:
   - "**/book/**"
   - "**/contributors.md"
   - "docs/mermaid.min.js"
-ignoreRegExpList: ["/0x[0-9a-fA-F]+/", ".*asm!\\(.*?\\);"]
+ignoreRegExpList: ["/0x[0-9a-fA-F]+/", ".*asm!\\([\\s\\S]*?\\);"]
 minWordLength: 4
 caseSensitive: false
 allowCompoundWords: true
@@ -49,3 +49,4 @@ words:
   - webpki
   - zbuild
   - zunstable
+
