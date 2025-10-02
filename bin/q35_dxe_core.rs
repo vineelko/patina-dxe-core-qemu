@@ -92,6 +92,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         })
         .with_component(patina_performance::component::performance_config_provider::PerformanceConfigurationProvider)
         .with_component(patina_performance::component::performance::Performance)
+        .with_component(patina_smbios::component::SmbiosProviderManager::new())
         .start()
         .unwrap();
 

@@ -12,6 +12,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ahash"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "891477e0c6a8957309ee5c45a6368af3ae14bb510732d2684ffa19af310920f9"
+dependencies = [
+ "getrandom",
+ "once_cell",
+ "version_check",
+]
+
+[[package]]
 name = "alloc-no-stdlib"
 version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -177,6 +188,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "getrandom"
+version = "0.2.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "335ff9f135e4384c8150d6f27c6daed433577f86b4750418338c01a1a2528592"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "wasi",
+]
+
+[[package]]
 name = "goblin"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -185,6 +207,15 @@ dependencies = [
  "log",
  "plain",
  "scroll",
+]
+
+[[package]]
+name = "hashbrown"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
+dependencies = [
+ "ahash",
 ]
 
 [[package]]
@@ -207,6 +238,12 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 dependencies = [
  "spin",
 ]
+
+[[package]]
+name = "libc"
+version = "0.2.176"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "58f929b4d672ea937a23a1ab494143d968337a5f47e56d0815df1e0890ddf174"
 
 [[package]]
 name = "linked_list_allocator"
@@ -258,18 +295,6 @@ name = "managed"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ca88d725a0a943b096803bd34e73a4437208b6077654cc4ecb2947a5f91618d"
-
-[[package]]
-name = "mu_pi"
-version = "6.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d0cdb8b6c0d68ab80a720e84560635a0d1c6546414e8e15472d8cd96fbb596c"
-dependencies = [
- "indoc",
- "num-traits",
- "r-efi",
- "uuid",
-]
 
 [[package]]
 name = "mu_rust_helpers"
@@ -341,19 +366,17 @@ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "patina"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "11a2817267823ef07db4a70579b770f9e1c78681690ba105567b93590c4e302d"
+version = "11.1.0"
 dependencies = [
  "cfg-if",
  "fallible-streaming-iterator",
  "fixedbitset",
  "linkme",
  "log",
- "mu_pi",
  "mu_rust_helpers",
  "num-traits",
  "patina_macro",
+ "patina_pi",
  "r-efi",
  "scroll",
  "uart_16550",
@@ -362,14 +385,12 @@ dependencies = [
 
 [[package]]
 name = "patina_adv_logger"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "32398153b5f1e953e9626668e4dfd76c914c0d713157fe2871c6e8ccfd0aeb3e"
+version = "11.1.0"
 dependencies = [
  "log",
- "mu_pi",
  "mu_rust_helpers",
  "patina",
+ "patina_pi",
  "r-efi",
  "spin",
  "zerocopy",
@@ -378,9 +399,7 @@ dependencies = [
 
 [[package]]
 name = "patina_debugger"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "25ce2816eef4a32c0521c60271c2519cadea7525e17da426a6d507f96602bff4"
+version = "11.1.0"
 dependencies = [
  "bitfield-struct",
  "cfg-if",
@@ -394,9 +413,7 @@ dependencies = [
 
 [[package]]
 name = "patina_dxe_core"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "f997ea1249f9d926403e0ac29e2d97812fae19b75c094acc2442234fa98b3572"
+version = "11.1.0"
 dependencies = [
  "arm-gic",
  "cfg-if",
@@ -406,7 +423,6 @@ dependencies = [
  "lazy_static",
  "linked_list_allocator",
  "log",
- "mu_pi",
  "mu_rust_helpers",
  "patina",
  "patina_debugger",
@@ -417,6 +433,7 @@ dependencies = [
  "patina_internal_device_path",
  "patina_paging",
  "patina_performance",
+ "patina_pi",
  "r-efi",
  "scroll",
  "spin",
@@ -426,56 +443,48 @@ dependencies = [
 
 [[package]]
 name = "patina_ffs"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "2a2621ff01279348a989ad31435bfb611204888ec377201d511d5e6f7bc22397"
+version = "11.1.0"
 dependencies = [
  "log",
- "mu_pi",
  "patina",
+ "patina_pi",
  "r-efi",
 ]
 
 [[package]]
 name = "patina_ffs_extractors"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "99f4a160310d650283bfa9dc25ffb62f6e0cef918bb95a39e41b88da4346beed"
+version = "11.1.0"
 dependencies = [
  "alloc-no-stdlib",
  "brotli-decompressor",
  "crc32fast",
  "log",
- "mu_pi",
  "patina",
  "patina_ffs",
  "patina_lzma_rs",
+ "patina_pi",
  "r-efi",
 ]
 
 [[package]]
 name = "patina_internal_collections"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "a1c6345ba7003483d59527217b49ed745179fb5e02e16e1f609b7817fa28646f"
+version = "11.1.0"
 dependencies = [
  "log",
 ]
 
 [[package]]
 name = "patina_internal_cpu"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "e137dc1de9a3891e4eab9fc98b317666fdebab9b4d328c90976c7165db0ce253"
+version = "11.1.0"
 dependencies = [
  "arm-gic",
  "cfg-if",
  "lazy_static",
  "log",
- "mu_pi",
  "patina",
  "patina_mtrr",
  "patina_paging",
+ "patina_pi",
  "patina_stacktrace",
  "r-efi",
  "safe-mmio",
@@ -485,9 +494,7 @@ dependencies = [
 
 [[package]]
 name = "patina_internal_depex"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "2dd8386e7ea7df746e4a3581fdf5ef59c6c6a96a61d14da5c56b1d224e83b4af"
+version = "11.1.0"
 dependencies = [
  "log",
  "r-efi",
@@ -496,9 +503,7 @@ dependencies = [
 
 [[package]]
 name = "patina_internal_device_path"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "1030051b96b34806c453aeafc9c854e9e759f5a492dc9821becfe9e663a8bab8"
+version = "11.1.0"
 dependencies = [
  "log",
  "r-efi",
@@ -517,9 +522,7 @@ dependencies = [
 
 [[package]]
 name = "patina_macro"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "8264d205223dc6fa11cf4f65eef65e790670cc5de466e710b76434fdeb083889"
+version = "11.1.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -529,9 +532,7 @@ dependencies = [
 
 [[package]]
 name = "patina_mm"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "382f7b54f2589d783b74309f01f6365c926fdbb176b7c1b6e68c6549b7235810"
+version = "11.1.0"
 dependencies = [
  "cfg-if",
  "log",
@@ -552,9 +553,9 @@ dependencies = [
 
 [[package]]
 name = "patina_paging"
-version = "8.1.2"
+version = "9.0.0"
 source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "7babccd95ce5df0e21de4ed6560237681ae406e16a0ebbd11e8389677b0aa838"
+checksum = "aa5aae7229b56bde996b541d9b40352b2f9024cdcca6c1f1839001daf8b8261a"
 dependencies = [
  "bitfield-struct",
  "bitflags 2.9.4",
@@ -564,35 +565,50 @@ dependencies = [
 
 [[package]]
 name = "patina_performance"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "25562bf035d637f17a0d3867836088e8474d050a993b74f7988621c73f7cfbf4"
+version = "11.1.0"
 dependencies = [
  "log",
- "mu_pi",
  "mu_rust_helpers",
  "patina",
  "patina_internal_device_path",
+ "patina_pi",
  "r-efi",
  "scroll",
  "uuid",
 ]
 
 [[package]]
+name = "patina_pi"
+version = "11.1.0"
+dependencies = [
+ "indoc",
+ "num-traits",
+ "r-efi",
+ "uuid",
+]
+
+[[package]]
 name = "patina_samples"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "2a4425cf03198382bb80270246e0d1b23231c483f03a284a410d35cab413af69"
+version = "11.1.0"
 dependencies = [
  "log",
  "patina",
 ]
 
 [[package]]
+name = "patina_smbios"
+version = "11.1.0"
+dependencies = [
+ "hashbrown",
+ "log",
+ "patina",
+ "r-efi",
+ "spin",
+]
+
+[[package]]
 name = "patina_stacktrace"
-version = "11.0.0"
-source = "sparse+https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/"
-checksum = "32d61ea7a70fdc9b83933454103da72a8c798a18c6776a9f0bc8480e75878e80"
+version = "11.1.0"
 dependencies = [
  "cfg-if",
  "log",
@@ -632,6 +648,7 @@ dependencies = [
  "patina_mm",
  "patina_performance",
  "patina_samples",
+ "patina_smbios",
  "patina_stacktrace",
  "r-efi",
  "x86_64",
@@ -879,10 +896,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2f87b8aa10b915a06587d0dec516c282ff295b475d94abf425d62b57710070a2"
 
 [[package]]
+name = "version_check"
+version = "0.9.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
 name = "volatile"
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "442887c63f2c839b346c192d047a7c87e73d0689c9157b00b53dcc27dd5ea793"
+
+[[package]]
+name = "wasi"
+version = "0.11.1+wasi-snapshot-preview1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b"
 
 [[package]]
 name = "wyz"
