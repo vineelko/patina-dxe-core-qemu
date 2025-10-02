@@ -9,12 +9,12 @@
 //! SPDX-License-Identifier: Apache-2.0
 //!
 
-use patina_mm::config::{CommunicateBuffer, MmCommunicationConfiguration};
-use patina_sdk::component::{
+use patina::component::{
     IntoComponent,
     hob::{FromHob, Hob},
     params::ConfigMut,
 };
+use patina_mm::config::{CommunicateBuffer, MmCommunicationConfiguration};
 
 use crate::q35::registers as register;
 
@@ -48,7 +48,7 @@ impl MmConfigurationProvider {
     /// Depends on at least one instance of the MM Communicate Region HOB to be present in the HOB list. This component
     /// will not be dispatched if no MM Communicate Region HOBs are present in the HOB list.
     ///
-    /// Depends on a mutable `patina_sdk::component::config::mm::MmCommunicationConfiguration` instance to be in storage. This
+    /// Depends on a mutable `patina::component::config::mm::MmCommunicationConfiguration` instance to be in storage. This
     /// component will populate the given configuration instance with runtime information about the MM configuration
     /// and lock the configuration to prevent further modifications and to allow components with immutable dependencies
     /// on the configuration to be dispatched.
@@ -62,19 +62,19 @@ impl MmConfigurationProvider {
     /// ## Returns
     ///
     /// - `Ok(())` if the entry point was successful.
-    /// - `Err(patina_sdk::error::Result)` if the entry point failed.
+    /// - `Err(patina::error::Result)` if the entry point failed.
     ///
     pub fn entry_point(
         self,
         mm_comm_region_hob: Hob<MmCommRegionHob>,
         mut config_mut: ConfigMut<MmCommunicationConfiguration>,
-    ) -> patina_sdk::error::Result<()> {
+    ) -> patina::error::Result<()> {
         log::debug!("MM Configuration Provider Entry Point");
 
         log::debug!("Incoming MM Configuration: {config_mut:?}");
 
         let pm_base: *const u16 = (register::PCI_EXPRESS_BASE_ADDRESS as usize
-            + patina_sdk::pci_address!(0, 0x1F, 0, register::ich9::PMBASE) as usize)
+            + patina::pci_address!(0, 0x1F, 0, register::ich9::PMBASE) as usize)
             as *const u16;
         let pm_base_value: u16 = unsafe { core::ptr::read_volatile(pm_base) } & register::ich9::PMBASE_MASK;
 
@@ -93,7 +93,7 @@ impl MmConfigurationProvider {
             unsafe {
                 config_mut.comm_buffers.push(CommunicateBuffer::from_raw_parts(
                     hob.address as usize as *mut u8,
-                    hob.pages as usize * patina_sdk::base::UEFI_PAGE_SIZE,
+                    hob.pages as usize * patina::base::UEFI_PAGE_SIZE,
                     hob.buffer_type as u8,
                 ));
             }

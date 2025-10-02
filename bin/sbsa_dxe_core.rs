@@ -11,10 +11,9 @@
 #![no_main]
 
 use core::{ffi::c_void, panic::PanicInfo};
+use patina::{log::Format, serial::uart::UartPl011};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::{Core, GicBases};
-use patina_samples as sc;
-use patina_sdk::{log::Format, serial::uart::UartPl011};
 use patina_stacktrace::StackTrace;
 
 #[panic_handler]
@@ -60,13 +59,8 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     Core::default()
         .init_memory(physical_hob_list) // We can make allocations now!
         .with_config(GicBases::new(0x40060000, 0x40080000)) // GIC bases for AArch64
-        .with_config(sc::Name("World")) // Config knob for sc::log_hello
         .with_service(patina_ffs_extractors::CompositeSectionExtractor::default())
         .with_component(adv_logger_component)
-        .with_component(sc::log_hello) // Example of a function component
-        .with_component(sc::HelloStruct("World")) // Example of a struct component
-        .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
-        .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)
         .start()
         .unwrap();
 

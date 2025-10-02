@@ -10,8 +10,8 @@
 //! SPDX-License-Identifier: Apache-2.0
 //!
 
+use patina::component::{IntoComponent, service::Service};
 use patina_mm::service::MmCommunication;
-use patina_sdk::component::{IntoComponent, service::Service};
 use r_efi::efi;
 
 /// MM Supervisor Request Header
@@ -60,7 +60,7 @@ impl QemuQ35MmTest {
     ///
     /// Uses the `MmCommunication` service to send a request version information from the MM Supervisor. The MM
     /// Supervisor is expected to be the Standalone MM environment used on the QEMU Q35 platform.
-    pub fn entry_point(self, mm_comm: Service<dyn MmCommunication>) -> patina_sdk::error::Result<()> {
+    pub fn entry_point(self, mm_comm: Service<dyn MmCommunication>) -> patina::error::Result<()> {
         log::debug!("MM Test Entry Point - Testing MM Communication");
 
         let mm_supv_req_header = MmSupervisorRequestHeader {
@@ -90,7 +90,7 @@ impl QemuQ35MmTest {
                 )
                 .map_err(|_| {
                     log::error!("MM Communication failed");
-                    patina_sdk::error::EfiError::DeviceError // Todo: Map actual codes
+                    patina::error::EfiError::DeviceError // Todo: Map actual codes
                 })?
         };
 

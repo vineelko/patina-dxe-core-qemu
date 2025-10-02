@@ -11,10 +11,10 @@
 #![no_main]
 
 use core::{ffi::c_void, panic::PanicInfo};
+use patina::{log::Format, serial::uart::Uart16550};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::Core;
 use patina_samples as sc;
-use patina_sdk::{log::Format, serial::uart::Uart16550};
 use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
 extern crate alloc;
@@ -64,10 +64,8 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
 
     Core::default()
         .init_memory(physical_hob_list) // We can make allocations now!
-        .with_config(sc::Name("World")) // Config knob for sc::log_hello
         .with_service(patina_ffs_extractors::CompositeSectionExtractor::default())
         .with_component(adv_logger_component)
-        .with_component(sc::log_hello) // Example of a function component
         .with_component(sc::HelloStruct("World")) // Example of a struct component
         .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
         .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)
@@ -85,11 +83,11 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_config(patina_performance::config::PerfConfig {
             enable_component: true,
             enabled_measurements: {
-                patina_sdk::performance::Measurement::DriverBindingStart         // Adds driver binding start measurements.
-               | patina_sdk::performance::Measurement::DriverBindingStop        // Adds driver binding stop measurements.
-               | patina_sdk::performance::Measurement::DriverBindingSupport     // Adds driver binding support measurements.
-               | patina_sdk::performance::Measurement::LoadImage                // Adds load image measurements.
-               | patina_sdk::performance::Measurement::StartImage // Adds start image measurements.
+                patina::performance::Measurement::DriverBindingStart         // Adds driver binding start measurements.
+               | patina::performance::Measurement::DriverBindingStop        // Adds driver binding stop measurements.
+               | patina::performance::Measurement::DriverBindingSupport     // Adds driver binding support measurements.
+               | patina::performance::Measurement::LoadImage                // Adds load image measurements.
+               | patina::performance::Measurement::StartImage // Adds start image measurements.
             },
         })
         .with_component(patina_performance::component::performance_config_provider::PerformanceConfigurationProvider)
