@@ -90,16 +90,24 @@ impl MmConfigurationProvider {
             log::debug!("HOB Pages: {:#X}", hob.pages);
             log::debug!("HOB Buffer Type: {:#X}", hob.buffer_type);
 
-            unsafe {
-                config_mut.comm_buffers.push(CommunicateBuffer::from_raw_parts(
+            let buffer = unsafe {
+                CommunicateBuffer::from_raw_parts(
                     hob.address as usize as *mut u8,
                     hob.pages as usize * patina::base::UEFI_PAGE_SIZE,
                     hob.buffer_type as u8,
-                ));
-            }
-        }
+                )
+            };
 
-        log::debug!("Outgoing MM Configuration: {config_mut:?}");
+            match buffer {
+                Ok(buffer) => {
+                    config_mut.comm_buffers.push(buffer);
+                }
+                Err(e) => {
+                    log::error!("Failed to create MM Communicate Buffer from HOB: {e:?}");
+                    debug_assert!(false, "Failed to create MM Communicate Buffer from HOB");
+                }
+            };
+        }
 
         config_mut.lock();
 
