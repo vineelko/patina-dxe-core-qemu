@@ -50,6 +50,9 @@ binary in the [patina-qemu](https://github.com/OpenDevicePartnership/patina-qemu
    Output File:      'target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi'
    ```
 
+The [patina_debugger](https://github.com/OpenDevicePartnership/patina/blob/main/docs/src/dxe_core/debugging.md) can be
+enabled by passing the `enable_debugger` feature to the build, e.g. `cargo make q35 --features enable_debugger.
+
 ## Size Comparison
 
 The code in both the C and Rust modules is always changing and depending on the compression algorithm used, size comparisons
@@ -59,6 +62,12 @@ both as debug and release, then compared to a Q35 build that contains the normal
 The Patina DXE Core does include support for performance tracing and features that are normally provided by the CpuDxe and
 RuntimeDxe drivers.  So the Tiano DXE Core size entries below include compiling with performance tracing enabled and
 include the size of the CpuDxe and RuntimeDxe drivers.
+
+### Cargo Bloat
+
+A size breakdown, whether by function or crate, can be analyzed by using `cargo make bloat-q35` or
+`cargo make bloat-sbsa`. Optionally, additional arguments can be passed, e.g. to see a crate breakdown:
+`cargo make bloat-q35 --crates -n 40`.
 
 ### Release Builds
 
