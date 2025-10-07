@@ -43,8 +43,9 @@ static LOGGER: AdvancedLogger<UartPl011> = AdvancedLogger::new(
     UartPl011::new(0x6000_0000),
 );
 
+#[cfg(feature = "enable_debugger")]
 static DEBUGGER: patina_debugger::PatinaDebugger<UartPl011> =
-    patina_debugger::PatinaDebugger::new(UartPl011::new(0x6000_0000)).with_force_enable(false);
+    patina_debugger::PatinaDebugger::new(UartPl011::new(0x6000_0000)).with_force_enable(true);
 
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
@@ -52,6 +53,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     let adv_logger_component = AdvancedLoggerComponent::<UartPl011>::new(&LOGGER);
     adv_logger_component.init_advanced_logger(physical_hob_list).unwrap();
 
+    #[cfg(feature = "enable_debugger")]
     patina_debugger::set_debugger(&DEBUGGER);
 
     log::info!("DXE Core Platform Binary v{}", env!("CARGO_PKG_VERSION"));
