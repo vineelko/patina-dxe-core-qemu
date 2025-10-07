@@ -164,12 +164,30 @@ private = true
 script_runner = "@duckscript"
 script = '''
 1 = get_env CARGO_MAKE_TASK_ARGS
-needs_patch = not is_empty ${1}
-patch_str = concat "\n[patch.patina-fw]"
+
+# Find all arguments after --crate-patch and collect them
+patch_repos = array
+if not is_empty ${1}
+    args = split ${1} ";"
+    for arg in ${args}
+        split_args = split ${arg} " "
+        found_patch_flag = set false
+        for split_arg in ${split_args}
+            if eq ${split_arg} "--crate-patch"
+                found_patch_flag = set true
+            elseif ${found_patch_flag}
+                array_push ${patch_repos} ${split_arg}
+                found_patch_flag = set false
+            end
+        end
+    end
+end
+
+needs_patch = not is_empty ${patch_repos}
 
 if ${needs_patch}
-    2 = split ${1} ;
-    for repo in ${2}
+    patch_str = concat "\n[patch.patina-fw]"
+    for repo in ${patch_repos}
         echo "Processing repo: ${repo}"
         if not is_path_exists ${repo}/Cargo.toml
             echo "Path ${repo}/Cargo.toml does not exist."
@@ -214,19 +232,60 @@ if ${needs_patch}
 end
 
 # Execute the actual cargo command
-exit_code = exec --get-exit-code cargo make build-efi
+cm_run_task build-efi
 
 if ${needs_patch}
     # Revert the Cargo.toml file to the original state
     mv Cargo.toml.bak Cargo.toml
 end
 
-exit ${exit_code}
+exit 0
+'''
+
+[tasks.build-efi-exec]
+command = "cargo"
+args = ["build", "--bin", "${CARGO_BIN_NAME}", "--target", "${CARGO_BIN_TARGET}", "--features", "${COMBINED_FEATURES}", "@@split(NO_STD_FLAGS, )"]
+
+[tasks.build-efi-prepare-features]
+script_runner = "@duckscript"
+script = '''
+make_args = get_env CARGO_MAKE_TASK_ARGS
+base_features = get_env CARGO_BIN_FEATURES
+
+# Default to base features
+combined_features = set ${base_features}
+
+# Find argument after --features and collect it
+features = set ""
+if not is_empty ${make_args}
+    args = split ${make_args} ";"
+    for arg in ${args}
+        split_args = split ${arg} " "
+        found_feature_flag = set false
+        for split_arg in ${split_args}
+            if eq ${split_arg} "--features"
+                found_feature_flag = set true
+            elseif ${found_feature_flag}
+                features = set ${split_arg}
+                found_feature_flag = set false
+            end
+        end
+    end
+end
+
+if is_empty ${base_features}
+    combined_features = set ${features}
+else
+    combined_features = concat ${base_features} "," ${features}
+end
+
+# Set the combined features for the build-efi-exec task
+set_env COMBINED_FEATURES ${combined_features}
 '''
 
 [tasks.build-efi]
-command = "cargo"
-args = ["build", "--bin", "${CARGO_BIN_NAME}", "--target", "${CARGO_BIN_TARGET}", "--features", "${CARGO_BIN_FEATURES}", "@@split(NO_STD_FLAGS, )"]
+dependencies = ["build-efi-prepare-features"]
+run_task = "build-efi-exec"
 
 [tasks.build-efi-x64]
 private = true
