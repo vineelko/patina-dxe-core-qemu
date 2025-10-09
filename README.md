@@ -75,19 +75,19 @@ A size breakdown, whether by function or crate, can be analyzed by using `cargo 
 
 | Compression | Tiano DXE Core Size | Patina DXE Core Size | Difference |
 |:---:|:---:|:---:|:---:|
-| None | 423,424 | 784,384 | 352.5 KB (185.2%) |
-| Tiano | 133,847 | 365,086 | 225.8 KB (272.7%) |
-| Lzma | 118,807 | 314,775 | 191.4 KB (264.9%) |
-| Brotli | 120,721 | 301,069 | 176.1 KB (249.4%) |
+| None | 423,424 | 784,384 | 352.5 KB (85.2%) |
+| Tiano | 133,847 | 365,086 | 225.8 KB (172.7%) |
+| Lzma | 118,807 | 314,775 | 191.4 KB (164.9%) |
+| Brotli | 120,721 | 301,069 | 176.1 KB (149.4%) |
 
 ### Debug Builds
 
 | Compression | Tiano DXE Core Size | Patina DXE Core Size | Difference |
 |:---:|:---:|:---:|:---:|
-| None | 368,128 | 1,619,456 | 1222.0 KB (439.92%) |
-| Tiano | 187,076 | 603,400 | 406.6 KB (322.54%) |
-| Lzma | 164,637 | 496,764 | 324.3 KB (301.73%) |
-| Brotli | 166,570 | 487,425 | 313.3 KB (292.6%) |
+| None | 368,128 | 1,619,456 | 1222.0 KB (339.92%) |
+| Tiano | 187,076 | 603,400 | 406.6 KB (222.54%) |
+| Lzma | 164,637 | 496,764 | 324.3 KB (201.73%) |
+| Brotli | 166,570 | 487,425 | 313.3 KB (192.6%) |
 
 ## NuGet Publishing
 
