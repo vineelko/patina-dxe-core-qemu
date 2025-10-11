@@ -238,7 +238,13 @@ if ${needs_patch}
             name = map_get ${package} name
             path = map_get ${package} id
 
-            path = replace ${path} "path+file:///" ""
+            # Unfortunately, the path formats are different between Windows and Linux environments
+            # path+file:// is added to Linux paths and path+file:/// is added to Windows paths
+            if is_windows
+                path = replace ${path} "path+file:///" ""
+            else
+                path = replace ${path} "path+file://" ""
+            end
             temp = split ${path} "#"
             path = array_get ${temp} 0
 
