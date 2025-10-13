@@ -22,15 +22,16 @@ path = "src/lib.rs"
 log = { version = "^0.4", default-features = false, features = [
     "release_max_level_warn",
 ] }
-patina_adv_logger = { version = "11" }
-patina_debugger = { version = "11" }
-patina_dxe_core = { version = "11" }
-patina_mm = { version = "11" }
-patina_performance = { version = "11"}
-patina_samples = { version = "11" }
-patina = { version = "11", features = ["enable_patina_tests"] }
-patina_ffs_extractors = { version = "11" }
-patina_stacktrace = { version = "11" }
+patina = { path = "../patina/sdk/patina", features = ["enable_patina_tests"] }
+patina_adv_logger = { path = "../patina/components/patina_adv_logger" }
+patina_debugger = { path = "../patina/core/patina_debugger" }
+patina_dxe_core = { path = "../patina/patina_dxe_core" }
+patina_mm = { path = "../patina/components/patina_mm" }
+patina_performance = { path = "../patina/components/patina_performance" }
+patina_samples = { path = "../patina/components/patina_samples" }
+patina_smbios = { path = "../patina/components/patina_smbios" }
+patina_ffs_extractors = { path = "../patina/sdk/patina_ffs_extractors" }
+patina_stacktrace = { path = "../patina/core/patina_stacktrace" }
 r-efi = { version = "^5", default-features = false }
 x86_64 = { version = "=0.15.2", default-features = false, features = [
   "instructions"
@@ -61,3 +62,23 @@ doc = []
 std = []
 build_debugger = []
 enable_debugger = ["build_debugger"]
+
+# Patch to use local patina repository for SMBIOS component development
+[patch.'https://pkgs.dev.azure.com/patina-fw/artifacts/_packaging/temporary/Cargo/index/']
+patina = { path = "../patina/sdk/patina" }
+patina_pi = { path = "../patina/sdk/patina_pi" }
+patina_macro = { path = "../patina/sdk/patina_macro" }
+patina_ffs = { path = "../patina/sdk/patina_ffs" }
+patina_ffs_extractors = { path = "../patina/sdk/patina_ffs_extractors" }
+patina_dxe_core = { path = "../patina/patina_dxe_core" }
+patina_adv_logger = { path = "../patina/components/patina_adv_logger" }
+patina_mm = { path = "../patina/components/patina_mm" }
+patina_performance = { path = "../patina/components/patina_performance" }
+patina_samples = { path = "../patina/components/patina_samples" }
+patina_smbios = { path = "../patina/components/patina_smbios" }
+patina_stacktrace = { path = "../patina/core/patina_stacktrace" }
+patina_debugger = { path = "../patina/core/patina_debugger" }
+patina_internal_collections = { path = "../patina/core/patina_internal_collections" }
+patina_internal_cpu = { path = "../patina/core/patina_internal_cpu" }
+patina_internal_depex = { path = "../patina/core/patina_internal_depex" }
+patina_internal_device_path = { path = "../patina/core/patina_internal_device_path" }

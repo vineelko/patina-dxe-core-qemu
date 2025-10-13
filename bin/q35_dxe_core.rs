@@ -15,6 +15,7 @@ use patina::{log::Format, serial::uart::Uart16550};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::Core;
 use patina_samples as sc;
+use patina_smbios::component::{SmbiosConfiguration, SmbiosProviderManager};
 use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
 extern crate alloc;
@@ -76,6 +77,13 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_component(sc::HelloStruct("World")) // Example of a struct component
         .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
         .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)0
+        // Configure SMBIOS for version 3.9
+        .with_config(SmbiosConfiguration { major_version: 3, minor_version: 9 })
+        .with_component(SmbiosProviderManager::new())
+        // Add example component that creates SMBIOS records
+        .with_component(q35_services::smbios_example::SmbiosExamplePublisher::new())
+        // Publish SMBIOS table to configuration table
+        .with_component(q35_services::smbios_publisher::SmbiosTablePublisher::new())
         .with_config(patina_mm::config::MmCommunicationConfiguration {
             acpi_base: patina_mm::config::AcpiBase::Mmio(0x0), // Actual ACPI base address will be set during boot
             cmd_port: patina_mm::config::MmiPort::Smi(0xB2),
