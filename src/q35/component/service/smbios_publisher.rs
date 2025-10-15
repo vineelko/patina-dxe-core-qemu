@@ -9,7 +9,7 @@ use patina::{
     component::{IntoComponent, service::Service},
     error::Result,
 };
-use patina_smbios::smbios_derive::SmbiosRecords;
+use patina_smbios::manager::SmbiosRecords;
 
 #[derive(IntoComponent)]
 pub struct SmbiosTablePublisher;

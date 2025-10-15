@@ -4,7 +4,7 @@ use alloc::vec;
 use alloc::string::String;
 
 use patina::{component::{IntoComponent, service::Service}, error::Result};
-use patina_smbios::smbios_derive::{SmbiosRecords, SMBIOS_HANDLE_PI_RESERVED, SmbiosTableHeader};
+use patina_smbios::manager::{SmbiosRecords, SMBIOS_HANDLE_PI_RESERVED, SmbiosTableHeader};
 use patina_smbios::smbios_record::{Type0PlatformFirmwareInformation, Type1SystemInformation, SmbiosRecordStructure};
 
 #[derive(IntoComponent)]
