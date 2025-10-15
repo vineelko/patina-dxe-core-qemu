@@ -1,6 +1,7 @@
 ﻿//! SMBIOS Example Component for QEMU Q35
 extern crate alloc;
 use alloc::vec;
+use alloc::vec::Vec;
 use alloc::string::String;
 
 use patina::{component::{IntoComponent, service::Service}, error::Result};
@@ -45,7 +46,7 @@ impl SmbiosExamplePublisher {
             string_pool: vec![
                 String::from("Patina Firmware"),
                 String::from("1.0.0"),
-                String::from("10/13/2025"),
+                String::from("10/15/2025"),
             ],
         };
         
@@ -83,6 +84,19 @@ impl SmbiosExamplePublisher {
         match smbios_service.add_from_bytes(None, &system_bytes) {
             Ok(handle) => log::info!("✓ Added Type 1 (System Info) with handle 0x{:04X}", handle),
             Err(e) => log::warn!("Failed to add Type 1: {:?}", e),
+        }
+
+        // Type 127: End-of-Table (Required by SMBIOS spec)
+        // This is a mandatory marker indicating the end of the SMBIOS structure table
+        let end_of_table: Vec<u8> = vec![
+            127,  // Type 127 (End-of-Table)
+            4,    // Length (header only, 4 bytes)
+            0xFF, 0xFF,  // Handle (typically 0xFFFF for end marker)
+            0x00, 0x00,  // Double-null terminator (no strings)
+        ];
+        match smbios_service.add_from_bytes(None, &end_of_table) {
+            Ok(handle) => log::info!("✓ Added Type 127 (End-of-Table) with handle 0x{:04X}", handle),
+            Err(e) => log::warn!("Failed to add Type 127: {:?}", e),
         }
         
         // Enumerate all SMBIOS records present in the system
