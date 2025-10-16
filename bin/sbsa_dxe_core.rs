@@ -15,6 +15,7 @@ use patina::{log::Format, serial::uart::UartPl011};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::{Core, GicBases};
 use patina_stacktrace::StackTrace;
+use patina_samples as sc;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -52,6 +53,8 @@ const _ENABLE_DEBUGGER: bool = false;
 static DEBUGGER: patina_debugger::PatinaDebugger<UartPl011> =
     patina_debugger::PatinaDebugger::new(UartPl011::new(0x6000_0000)).with_force_enable(_ENABLE_DEBUGGER);
 
+#[allow(unconditional_panic)]
+
 #[cfg_attr(target_os = "uefi", unsafe(export_name = "efi_main"))]
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     log::set_logger(&LOGGER).map(|()| log::set_max_level(log::LevelFilter::Trace)).unwrap();
@@ -68,9 +71,17 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_config(GicBases::new(0x40060000, 0x40080000)) // GIC bases for AArch64
         .with_service(patina_ffs_extractors::CompositeSectionExtractor::default())
         .with_component(adv_logger_component)
+        .with_component(sc::HelloStruct("World")) // Example of a struct component
+        .with_component(sc::GreetingsEnum::Hello("World")) // Example of a struct component (enum)
+        .with_component(sc::GreetingsEnum::Goodbye("World")) // Example of a struct component (enum)0
         .start()
         .unwrap();
 
     log::info!("Dead Loop Time");
+
+    let x = 10;
+    let y = 0;
+
+    log::info!("{}", x / y);
     loop {}
 }

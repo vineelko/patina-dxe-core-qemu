@@ -12,7 +12,7 @@
 
 use patina::component::{IntoComponent, service::Service};
 use patina_mm::service::MmCommunication;
-use r_efi::efi;
+use patina::Guid;
 
 /// MM Supervisor Request Header
 ///
@@ -79,13 +79,13 @@ impl QemuQ35MmTest {
                         &mm_supv_req_header as *const _ as *const u8,
                         core::mem::size_of::<MmSupervisorRequestHeader>(),
                     ),
-                    efi::Guid::from_fields(
+                    Guid::from_fields(
                         0x8c633b23,
                         0x1260,
                         0x4ea6,
                         0x83,
                         0x0F,
-                        &[0x7d, 0xdc, 0x97, 0x38, 0x21, 0x11],
+                        [0x7d, 0xdc, 0x97, 0x38, 0x21, 0x11],
                     ),
                 )
                 .map_err(|_| {
