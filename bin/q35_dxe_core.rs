@@ -62,7 +62,11 @@ static DEBUGGER: patina_debugger::PatinaDebugger<Uart16550> =
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     log::set_logger(&LOGGER).map(|()| log::set_max_level(log::LevelFilter::Trace)).unwrap();
     let adv_logger_component = AdvancedLoggerComponent::<Uart16550>::new(&LOGGER);
-    adv_logger_component.init_advanced_logger(physical_hob_list).unwrap();
+    // SAFETY: The physical_hob_list pointer is considered valid at this point as it's provided by the core
+    // to the entry point.
+    unsafe {
+        adv_logger_component.init_advanced_logger(physical_hob_list).unwrap();
+    }
 
     #[cfg(feature = "build_debugger")]
     patina_debugger::set_debugger(&DEBUGGER);

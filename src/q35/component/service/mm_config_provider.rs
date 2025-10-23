@@ -33,7 +33,7 @@ pub struct MmConfigurationProvider;
 /// especially in MM code. Platforms may also impose restrictions on the accessibility of the MM Communication Region
 /// from within MM. For example, only mapping designated MM Communication Region pages to the MM address space. Consult
 /// platform requirements and documentation for more information.
-#[derive(FromHob, Default, Clone, Copy)]
+#[derive(FromHob, Default, Clone, Copy, zerocopy::FromBytes)]
 #[hob = "d4ffc718-fb82-4274-9afc-aa8b1eef5293"]
 #[repr(C)]
 pub struct MmCommRegionHob {
