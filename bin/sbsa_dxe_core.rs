@@ -15,6 +15,7 @@ use patina::{log::Format, serial::uart::UartPl011};
 use patina_adv_logger::{component::AdvancedLoggerComponent, logger::AdvancedLogger};
 use patina_dxe_core::{Core, GicBases};
 use patina_stacktrace::StackTrace;
+use patina_samples::component::hello_world::HelloStruct;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -56,7 +57,7 @@ static DEBUGGER: patina_debugger::PatinaDebugger<UartPl011> =
 pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
     log::set_logger(&LOGGER).map(|()| log::set_max_level(log::LevelFilter::Trace)).unwrap();
     let adv_logger_component = AdvancedLoggerComponent::<UartPl011>::new(&LOGGER);
-    adv_logger_component.init_advanced_logger(physical_hob_list).unwrap();
+    unsafe { adv_logger_component.init_advanced_logger(physical_hob_list).unwrap() };
 
     #[cfg(feature = "build_debugger")]
     patina_debugger::set_debugger(&DEBUGGER);
@@ -68,6 +69,7 @@ pub extern "efiapi" fn _start(physical_hob_list: *const c_void) -> ! {
         .with_config(GicBases::new(0x40060000, 0x40080000)) // GIC bases for AArch64
         .with_service(patina_ffs_extractors::CompositeSectionExtractor::default())
         .with_component(adv_logger_component)
+        .with_component(HelloStruct("World")) // Example of a struct component
         .start()
         .unwrap();
 
