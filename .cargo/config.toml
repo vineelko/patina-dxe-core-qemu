@@ -6,27 +6,7 @@ rustflags = [
     "-C", "link-arg=/base:0x0",
     "-C", "link-arg=/subsystem:efi_boot_service_driver",
     "-C", "force-unwind-tables", # Generates .pdata section for stack tracing
-    # Starting with rustc 1.78 and later, the compiler (rustc) will
-    # automatically pass the flag /PDBALTPATH:%_PDB% to the linker (rust-lld).
-    # Note that %_PDB% is not read from the environment; instead, The linker
-    # will replace %_PDB% with the base name of the module being linked. This is
-    # not the desired behavior for us as it can break WinDBG in multiple ways,
-    # as we need the full path to the PDB file. Fortunately, if the flag exists
-    # but is empty, LLD will populate it with the full path of the PDB file.
-    #
-    # Ref:
-    # https://github.com/rust-lang/rust/pull/121297
-    # https://github.com/rust-lang/rust/blob/75530e9f72a1990ed2305e16fd51d02f47048f12/compiler/rustc_codegen_ssa/src/back/linker.rs#L1049-L1056
-    # https://github.com/llvm/llvm-project/blob/9ed772cecc23f5f5b060720399b010275bbb7457/lld/COFF/Driver.cpp#L2433-L2446
-    "-C", "link-arg=/PDBALTPATH:",
-]
-
-[target.i686-unknown-uefi]
-rustflags = [
-    "-C", "link-arg=/base:0x0",
-    "-C", "link-arg=/subsystem:efi_boot_service_driver",
-    "-C", "force-unwind-tables", # Generates .pdata section for stack tracing
-    "-C", "link-arg=/PDBALTPATH:",
+    "-C", "link-arg=/PDBALTPATH:qemu_q35_dxe_core.pdb",
 ]
 
 [target.aarch64-unknown-uefi]
@@ -34,5 +14,5 @@ rustflags = [
     "-C", "link-arg=/base:0x0",
     "-C", "link-arg=/subsystem:efi_boot_service_driver",
     "-C", "force-unwind-tables", # Generates .pdata section for stack tracing
-    "-C", "link-arg=/PDBALTPATH:",
+    "-C", "link-arg=/PDBALTPATH:qemu_sbsa_dxe_core.pdb",
 ]
