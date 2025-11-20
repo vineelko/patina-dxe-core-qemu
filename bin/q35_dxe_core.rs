@@ -19,6 +19,7 @@ use patina_stacktrace::StackTrace;
 use qemu_resources::q35::component::service as q35_services;
 extern crate alloc;
 use alloc::vec;
+use qemu_resources::q35::timer;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -34,6 +35,10 @@ fn panic(info: &PanicInfo) -> ! {
 
     loop {}
 }
+
+/// Port address of the ACPI PM Timer.
+/// Obtained from ACPI FADT `X_PM_TIMER_BLOCK`. It is always at 0x608 on Q35.
+const PM_TIMER_PORT: u16 = 0x608;
 
 static LOGGER: AdvancedLogger<Uart16550> = AdvancedLogger::new(
     Format::Standard,
@@ -66,8 +71,14 @@ struct Q35;
 // Default `MemoryInfo` implementation is sufficient for Q35.
 impl MemoryInfo for Q35 {}
 
-// Default `CpuInfo` implementation is sufficient for Q35.
-impl CpuInfo for Q35 {}
+// Q35 should use TSC frequency calibrated from ACPI PM Timer.
+impl CpuInfo for Q35 {
+    fn perf_timer_frequency() -> Option<u64> {
+        // SAFETY: Reading from the PM Timer I/O port is safe as long as the port is valid.
+        // On Q35, the PM Timer is always available at the specified port address.
+        Some(unsafe { timer::calibrate_tsc_frequency(PM_TIMER_PORT) })
+    }
+}
 
 impl ComponentInfo for Q35 {
     fn configs(mut add: Add<Config>) {
