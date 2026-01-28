@@ -1,0 +1,184 @@
+# @file binary-size-check.yml
+#
+# GitHub Actions workflow to compare binary sizes between two commits.
+#
+# Copyright (c) Microsoft Corporation.
+# SPDX-License-Identifier: Apache-2.0
+
+name: Binary Size Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit-sha-1:
+        description: 'The commit SHA 1 (older)'
+        required: true
+      commit-sha-2:
+        description: 'The commit SHA 2 (newer)'
+        required: true
+
+jobs:
+  run:
+    name: Binary Size Check
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, ubuntu-24.04-arm ]
+
+    steps:
+      - name: ✅ Checkout Repository at ${{ github.event.inputs.commit-sha-1 }} ✅
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.commit-sha-1 }}
+
+      - name: 🛠️ Download Rust Tools at ${{ github.event.inputs.commit-sha-1 }} 🛠️
+        uses: OpenDevicePartnership/patina-devops/.github/actions/rust-tool-cache@main
+
+      - name: Run Build Tasks at ${{ github.event.inputs.commit-sha-1 }}
+        run: |
+          cargo make q35
+          cargo make sbsa
+          cargo make q35-release
+          cargo make sbsa-release
+
+      - name: Get file size at ${{ github.event.inputs.commit-sha-1 }}
+        id: get-size-sha1
+        shell: bash
+        run: |
+          X64_PATINA_DXE_CORE_DEBUG_FILE="target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi"
+          X64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA1=$(python3 -c "import os; print(os.path.getsize('$X64_PATINA_DXE_CORE_DEBUG_FILE'))")
+          echo "x64_debug_file_size=$X64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA1" >> $GITHUB_OUTPUT
+
+          X64_PATINA_DXE_CORE_RELEASE_FILE="target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi"
+          X64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA1=$(python3 -c "import os; print(os.path.getsize('$X64_PATINA_DXE_CORE_RELEASE_FILE'))")
+          echo "x64_release_file_size=$X64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA1" >> $GITHUB_OUTPUT
+
+          AARCH64_PATINA_DXE_CORE_DEBUG_FILE="target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi"
+          AARCH64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA1=$(python3 -c "import os; print(os.path.getsize('$AARCH64_PATINA_DXE_CORE_DEBUG_FILE'))")
+          echo "aarch64_debug_file_size=$AARCH64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA1" >> $GITHUB_OUTPUT
+
+          AARCH64_PATINA_DXE_CORE_RELEASE_FILE="target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi"
+          AARCH64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA1=$(python3 -c "import os; print(os.path.getsize('$AARCH64_PATINA_DXE_CORE_RELEASE_FILE'))")
+          echo "aarch64_release_file_size=$AARCH64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA1" >> $GITHUB_OUTPUT
+
+      - name: ✅ Checkout Repository at ${{ github.event.inputs.commit-sha-2 }} ✅
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.commit-sha-2 }}
+
+      - name: 🛠️ Download Rust Tools at ${{ github.event.inputs.commit-sha-2 }} 🛠️
+        uses: OpenDevicePartnership/patina-devops/.github/actions/rust-tool-cache@main
+
+      - name: Run Build Tasks at ${{ github.event.inputs.commit-sha-2 }}
+        run: |
+          cargo make q35
+          cargo make sbsa
+          cargo make q35-release
+          cargo make sbsa-release
+
+      - name: Get file size at ${{ github.event.inputs.commit-sha-2 }}
+        id: get-size-sha2
+        shell: bash
+        run: |
+          X64_PATINA_DXE_CORE_DEBUG_FILE="target/x86_64-unknown-uefi/debug/qemu_q35_dxe_core.efi"
+          X64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA2=$(python3 -c "import os; print(os.path.getsize('$X64_PATINA_DXE_CORE_DEBUG_FILE'))")
+          echo "x64_debug_file_size=$X64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA2" >> $GITHUB_OUTPUT
+
+          X64_PATINA_DXE_CORE_RELEASE_FILE="target/x86_64-unknown-uefi/release/qemu_q35_dxe_core.efi"
+          X64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA2=$(python3 -c "import os; print(os.path.getsize('$X64_PATINA_DXE_CORE_RELEASE_FILE'))")
+          echo "x64_release_file_size=$X64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA2" >> $GITHUB_OUTPUT
+
+          AARCH64_PATINA_DXE_CORE_DEBUG_FILE="target/aarch64-unknown-uefi/debug/qemu_sbsa_dxe_core.efi"
+          AARCH64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA2=$(python3 -c "import os; print(os.path.getsize('$AARCH64_PATINA_DXE_CORE_DEBUG_FILE'))")
+          echo "aarch64_debug_file_size=$AARCH64_PATINA_DXE_CORE_DEBUG_SIZE_AT_SHA2" >> $GITHUB_OUTPUT
+
+          AARCH64_PATINA_DXE_CORE_RELEASE_FILE="target/aarch64-unknown-uefi/release/qemu_sbsa_dxe_core.efi"
+          AARCH64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA2=$(python3 -c "import os; print(os.path.getsize('$AARCH64_PATINA_DXE_CORE_RELEASE_FILE'))")
+          echo "aarch64_release_file_size=$AARCH64_PATINA_DXE_CORE_RELEASE_SIZE_AT_SHA2" >> $GITHUB_OUTPUT
+
+      - name: Compare File Sizes
+        shell: bash
+        run: |
+          echo "X64 Patina DXE Core size at SHA1(${{ github.event.inputs.commit-sha-1 }}): ${{ steps.get-size-sha1.outputs.x64_debug_file_size }}"
+          echo "X64 Patina DXE Core size at SHA2(${{ github.event.inputs.commit-sha-2 }}): ${{ steps.get-size-sha2.outputs.x64_debug_file_size }}"
+          X64_DEBUG_SIZE_DIFF=$(( ${{ steps.get-size-sha2.outputs.x64_debug_file_size }} - ${{ steps.get-size-sha1.outputs.x64_debug_file_size }} ))
+          echo "X64 Patina DXE Core Debug size difference: $X64_DEBUG_SIZE_DIFF bytes"
+
+          echo "X64 Patina DXE Core size at SHA1(${{ github.event.inputs.commit-sha-1 }}): ${{ steps.get-size-sha1.outputs.x64_release_file_size }}"
+          echo "X64 Patina DXE Core size at SHA2(${{ github.event.inputs.commit-sha-2 }}): ${{ steps.get-size-sha2.outputs.x64_release_file_size }}"
+          X64_RELEASE_SIZE_DIFF=$(( ${{ steps.get-size-sha2.outputs.x64_release_file_size }} - ${{ steps.get-size-sha1.outputs.x64_release_file_size }} ))
+          echo "X64 Patina DXE Core Release size difference: $X64_RELEASE_SIZE_DIFF bytes"
+
+          echo "AARCH64 Patina DXE Core size at SHA1(${{ github.event.inputs.commit-sha-1 }}): ${{ steps.get-size-sha1.outputs.aarch64_debug_file_size }}"
+          echo "AARCH64 Patina DXE Core size at SHA2(${{ github.event.inputs.commit-sha-2 }}): ${{ steps.get-size-sha2.outputs.aarch64_debug_file_size }}"
+          AARCH64_DEBUG_SIZE_DIFF=$(( ${{ steps.get-size-sha2.outputs.aarch64_debug_file_size }} - ${{ steps.get-size-sha1.outputs.aarch64_debug_file_size }} ))
+          echo "AARCH64 Patina DXE Core Debug size difference: $AARCH64_DEBUG_SIZE_DIFF bytes"
+
+          echo "AARCH64 Patina DXE Core size at SHA1(${{ github.event.inputs.commit-sha-1 }}): ${{ steps.get-size-sha1.outputs.aarch64_release_file_size }}"
+          echo "AARCH64 Patina DXE Core size at SHA2(${{ github.event.inputs.commit-sha-2 }}): ${{ steps.get-size-sha2.outputs.aarch64_release_file_size }}"
+          AARCH64_RELEASE_SIZE_DIFF=$(( ${{ steps.get-size-sha2.outputs.aarch64_release_file_size }} - ${{ steps.get-size-sha1.outputs.aarch64_release_file_size }} ))
+          echo "AARCH64 Patina DXE Core Release size difference: $AARCH64_RELEASE_SIZE_DIFF bytes"
+
+      - name: 📊 Binary Size Report - ${{ matrix.os }}
+        shell: bash
+        run: |
+          pretty_size() {
+            local bytes=$1
+            local sign=""
+
+            if (( bytes < 0 )); then
+              sign="-"
+              bytes=$(( -bytes ))
+            fi
+
+            awk -v b="$bytes" -v s="$sign" '
+              BEGIN {
+                if (b < 1024) {
+                  printf "%s%.2f B", s, b
+                } else if (b < 1024*1024) {
+                  printf "%s%.2f KiB", s, b/1024
+                } else {
+                  printf "%s%.2f MiB", s, b/(1024*1024)
+                }
+              }
+            '
+          }
+
+          SHA1="${{ github.event.inputs.commit-sha-1 }}"
+          SHA2="${{ github.event.inputs.commit-sha-2 }}"
+
+          X64_SHA1_DEBUG=${{ steps.get-size-sha1.outputs.x64_debug_file_size }}
+          X64_SHA2_DEBUG=${{ steps.get-size-sha2.outputs.x64_debug_file_size }}
+          X64_DEBUG_DIFF=$((X64_SHA2_DEBUG - X64_SHA1_DEBUG))
+
+          X64_SHA1_RELEASE=${{ steps.get-size-sha1.outputs.x64_release_file_size }}
+          X64_SHA2_RELEASE=${{ steps.get-size-sha2.outputs.x64_release_file_size }}
+          X64_RELEASE_DIFF=$((X64_SHA2_RELEASE - X64_SHA1_RELEASE))
+
+          AARCH64_SHA1_DEBUG=${{ steps.get-size-sha1.outputs.aarch64_debug_file_size }}
+          AARCH64_SHA2_DEBUG=${{ steps.get-size-sha2.outputs.aarch64_debug_file_size }}
+          AARCH64_DEBUG_DIFF=$((AARCH64_SHA2_DEBUG - AARCH64_SHA1_DEBUG))
+
+          AARCH64_SHA1_RELEASE=${{ steps.get-size-sha1.outputs.aarch64_release_file_size }}
+          AARCH64_SHA2_RELEASE=${{ steps.get-size-sha2.outputs.aarch64_release_file_size }}
+          AARCH64_RELEASE_DIFF=$((AARCH64_SHA2_RELEASE - AARCH64_SHA1_RELEASE))
+
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## 📦 Binary Size Report
+
+          | Architecture | Commit          | Debug Size | Release Size |
+          |--------------|-----------------|------------|--------------|
+          | x86_64       | \`${SHA1:0:7}\` | $(pretty_size "$X64_SHA1_DEBUG") | $(pretty_size "$X64_SHA1_RELEASE") |
+          | x86_64       | \`${SHA2:0:7}\` | $(pretty_size "$X64_SHA2_DEBUG") | $(pretty_size "$X64_SHA2_RELEASE") |
+          | aarch64      | \`${SHA1:0:7}\` | $(pretty_size "$AARCH64_SHA1_DEBUG") | $(pretty_size "$AARCH64_SHA1_RELEASE") |
+          | aarch64      | \`${SHA2:0:7}\` | $(pretty_size "$AARCH64_SHA2_DEBUG") | $(pretty_size "$AARCH64_SHA2_RELEASE") |
+
+          ### 📐 Size Difference
+
+          | Architecture | Δ Debug | Δ Release |
+          |--------------|---------|-----------|
+          | x86_64       | $(pretty_size "$X64_DEBUG_DIFF") | $(pretty_size "$X64_RELEASE_DIFF") |
+          | aarch64      | $(pretty_size "$AARCH64_DEBUG_DIFF") | $(pretty_size "$AARCH64_RELEASE_DIFF") |
+          EOF
