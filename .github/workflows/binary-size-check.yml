@@ -16,8 +16,6 @@ on:
       commit-sha-2:
         description: 'The commit SHA 2 (newer)'
         required: true
-  pull_request:
-
 jobs:
   run:
     name: Binary Size Check
