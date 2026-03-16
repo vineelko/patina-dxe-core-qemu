@@ -580,9 +580,9 @@ dependencies = [
 
 [[package]]
 name = "patina_paging"
-version = "11.0.1"
+version = "11.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec1919e0e181a5862379134dc14578a1df5cd767cd5a9db01205768cdcb21c18"
+checksum = "b08c667322d2a25e4c04a4e51910e10744042c82ceb1d3ed7f2e6bfde35a4fc6"
 dependencies = [
  "bitfield-struct",
  "bitflags 2.11.0",
@@ -672,7 +672,7 @@ checksum = "8bb0fd6580eeed0103c054e3fba2c2618ff476943762f28a645b63b8692b21c9"
 
 [[package]]
 name = "qemu_dxe_core"
-version = "2.2.14"
+version = "3.0.0"
 dependencies = [
  "log",
  "patina",
