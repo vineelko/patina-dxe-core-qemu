@@ -22,6 +22,7 @@ allowCompoundWords: true
 words:
   - acpi
   - apmc
+  - armvirt
   - asan
   - depex
   - dimm
@@ -58,6 +59,7 @@ words:
   - tiano
   - uart
   - uefi
+  - virt
   - vswhere
   - webpki
   - zbuild
