@@ -27,19 +27,21 @@ path = "src/lib.rs"
 log = { version = "^0.4", default-features = false, features = [
     "release_max_level_info",
 ] }
-patina_acpi = { version = "21" }
-patina_adv_logger = { version = "21" }
-patina_debugger = { version = "21" }
-patina_dxe_core = { version = "21" }
-patina_mm = { version = "21" }
-patina_performance = { version = "21" }
-patina_samples = { version = "21" }
-patina_smbios = { version = "21" }
-patina_test = { version = "21", features = ["test-runner"] }
-patina = { version = "21" }
-patina_ffs_extractors = { version = "21" }
-patina_stacktrace = { version = "21" }
-r-efi = { version = "^5", default-features = false }
+
+patina_acpi = { path="E:/repos/patina/components/patina_acpi" }
+patina_test = { path="E:/repos/patina/components/patina_test", features = ["test-runner"] }
+patina_mm = { path="E:/repos/patina/components/patina_mm" }
+patina_samples = { path="E:/repos/patina/components/patina_samples" }
+patina_smbios = { path="E:/repos/patina/components/patina_smbios"}
+patina = { path="E:/repos/patina/sdk/patina" }
+patina_adv_logger = { path="E:/repos/patina/components/patina_adv_logger" }
+patina_dxe_core = { path="E:/repos/patina/patina_dxe_core" }
+patina_performance = { path="E:/repos/patina/components/patina_performance" }
+patina_ffs_extractors = { path="E:/repos/patina/sdk/patina_ffs_extractors" }
+patina_stacktrace = { path="E:/repos/patina/core/patina_stacktrace" }
+patina_debugger = { path="E:/repos/patina/core/patina_debugger" }
+
+r-efi = { version = "^6", default-features = false }
 x86_64 = { version = "=0.15.2", default-features = false, features = [
   "instructions"
 ], optional = true }

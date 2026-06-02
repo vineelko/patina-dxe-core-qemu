@@ -21,6 +21,7 @@ use patina_smbios::{
         Type4ProcessorInformation, Type7CacheInformation, Type16PhysicalMemoryArray, Type17MemoryDevice,
         Type19MemoryArrayMappedAddress,
     },
+    smbios_types,
 };
 
 /// SBSA platform SMBIOS record provider.
@@ -47,14 +48,14 @@ impl SbsaSmbiosPlatform {
             bios_starting_address_segment: 0xE800,
             firmware_release_date: 3,
             firmware_rom_size: 0xFF,
-            characteristics: 0x08,
-            characteristics_ext1: 0x03,
-            characteristics_ext2: 0x03,
+            characteristics: 0x08.into(),
+            characteristics_ext1: 0x03.into(),
+            characteristics_ext2: 0x03.into(),
             system_bios_major_release: 1,
             system_bios_minor_release: 0,
             embedded_controller_major_release: 0xFF,
             embedded_controller_minor_release: 0xFF,
-            extended_bios_rom_size: 0,
+            extended_bios_rom_size: 0.into(),
             string_pool: vec![
                 String::from("Patina Firmware"),
                 String::from(env!("CARGO_PKG_VERSION")),
@@ -77,7 +78,7 @@ impl SbsaSmbiosPlatform {
             version: 3,
             serial_number: 4,
             uuid: [0; 16],
-            wake_up_type: 0x06,
+            wake_up_type: smbios_types::WakeUpType::PowerSwitch,
             sku_number: 5,
             family: 6,
             string_pool: vec![
@@ -103,10 +104,10 @@ impl SbsaSmbiosPlatform {
             version: 2,
             serial_number: 3,
             asset_tag_number: 4,
-            bootup_state: 0x03,
-            power_supply_state: 0x03,
-            thermal_state: 0x03,
-            security_status: 0x02,
+            bootup_state: smbios_types::BootUpState::Safe,
+            power_supply_state: smbios_types::PowerSupplyState::Safe,
+            thermal_state: smbios_types::ThermalState::Safe,
+            security_status: smbios_types::SecurityStatus::Unknown,
             oem_defined: 0x00000000,
             height: 0x00,
             number_of_power_cords: 0x01,
@@ -136,10 +137,10 @@ impl SbsaSmbiosPlatform {
             version: 3,
             serial_number: 4,
             asset_tag: 5,
-            feature_flags: 0x01,
+            feature_flags: 0x01.into(),
             location_in_chassis: 6,
             chassis_handle: type3_handle,
-            board_type: 0x0A,
+            board_type: smbios_types::BoardType::Motherboard,
             contained_object_handles: 0,
             string_pool: vec![
                 String::from("Example Corporation"),
@@ -160,17 +161,17 @@ impl SbsaSmbiosPlatform {
         let l1_cache = Type7CacheInformation {
             header: SmbiosTableHeader::new(7, 0, SMBIOS_HANDLE_PI_RESERVED),
             socket_designation: 1,
-            cache_configuration: 0x0180, // L1, enabled, write-back
-            maximum_cache_size: 64,      // 64 KB
-            installed_size: 64,
-            supported_sram_type: 0x0002, // Unknown
-            current_sram_type: 0x0002,
+            cache_configuration: 0x0180.into(), // L1, enabled, write-back
+            maximum_cache_size: 64.into(),      // 64 KB
+            installed_size: 64.into(),
+            supported_sram_type: 0x0002.into(), // Unknown
+            current_sram_type: 0x0002.into(),
             cache_speed: 0,
-            error_correction_type: 0x05, // Single-bit ECC
-            system_cache_type: 0x05,     // Unified
-            associativity: 0x06,         // 8-way
-            maximum_cache_size2: 64,
-            installed_cache_size2: 64,
+            error_correction_type: smbios_types::CacheErrorCorrectionType::SingleBitEcc, // Single-bit ECC
+            system_cache_type: smbios_types::SystemCacheType::Unified,                   // Unified
+            associativity: smbios_types::AssociativityField::FullyAssociative,           // Fully associative
+            maximum_cache_size2: 64.into(),
+            installed_size2: 64.into(),
             string_pool: vec![String::from("L1 Cache")],
         };
 
@@ -186,17 +187,17 @@ impl SbsaSmbiosPlatform {
         let l2_cache = Type7CacheInformation {
             header: SmbiosTableHeader::new(7, 0, SMBIOS_HANDLE_PI_RESERVED),
             socket_designation: 1,
-            cache_configuration: 0x0181, // L2, enabled, write-back
-            maximum_cache_size: 256,     // 256 KB
-            installed_size: 256,
-            supported_sram_type: 0x0002,
-            current_sram_type: 0x0002,
+            cache_configuration: 0x0181.into(), // L2, enabled, write-back
+            maximum_cache_size: 256.into(),     // 256 KB
+            installed_size: 256.into(),
+            supported_sram_type: 0x0002.into(),
+            current_sram_type: 0x0002.into(),
             cache_speed: 0,
-            error_correction_type: 0x05, // Single-bit ECC
-            system_cache_type: 0x05,     // Unified
-            associativity: 0x06,         // 8-way
-            maximum_cache_size2: 256,
-            installed_cache_size2: 256,
+            error_correction_type: smbios_types::CacheErrorCorrectionType::SingleBitEcc, // Single-bit ECC
+            system_cache_type: smbios_types::SystemCacheType::Unified,                   // Unified
+            associativity: smbios_types::AssociativityField::FullyAssociative,           // Fully associative
+            maximum_cache_size2: 256.into(),
+            installed_size2: 256.into(),
             string_pool: vec![String::from("L2 Cache")],
         };
 
@@ -213,17 +214,17 @@ impl SbsaSmbiosPlatform {
         let processor_info = Type4ProcessorInformation {
             header: SmbiosTableHeader::new(4, 0, SMBIOS_HANDLE_PI_RESERVED),
             socket_designation: 1,
-            processor_type: 0x03,   // Central Processor
+            processor_type: smbios_types::ProcessorTypeData::CentralProcessor, // Central Processor
             processor_family: 0xFE, // Use processor_family2
             processor_manufacturer: 2,
             processor_id: [0u8; 8],
             processor_version: 3,
-            voltage: 0x80,     // Legacy mode, voltage unknown
+            voltage: 0x80.into(),     // Legacy mode, voltage unknown
             external_clock: 0, // Unknown
             max_speed: 2000,
             current_speed: 2000,
-            status: 0x41,            // CPU Enabled, Populated
-            processor_upgrade: 0x06, // None
+            status: 0x41.into(),            // CPU Enabled, Populated
+            processor_upgrade: smbios_types::ProcessorUpgrade::NoUpgrade, // None
             l1_cache_handle,
             l2_cache_handle,
             l3_cache_handle: 0xFFFF, // Not provided
@@ -233,8 +234,8 @@ impl SbsaSmbiosPlatform {
             core_count: 1,
             core_enabled: 1,
             thread_count: 1,
-            processor_characteristics: 0x04, // 64-bit capable
-            processor_family2: 0x0100,       // ARMv8
+            processor_characteristics: 0x04.into(), // 64-bit capable
+            processor_family2: smbios_types::ProcessorFamilyData::ARMv8, // ARMv8
             core_count2: 1,
             core_enabled2: 1,
             thread_count2: 1,
@@ -256,9 +257,9 @@ impl SbsaSmbiosPlatform {
         // Type 16: Physical Memory Array
         let memory_array = Type16PhysicalMemoryArray {
             header: SmbiosTableHeader::new(16, 0, SMBIOS_HANDLE_PI_RESERVED),
-            location: 0x03,                          // System board
-            use_field: 0x03,                         // System memory
-            memory_error_correction: 0x03,           // None
+            location: smbios_types::MemoryArrayLocation::SystemBoard,                  // System board
+            use_field: smbios_types::MemoryArrayUse::SystemMemory,                     // System memory
+            memory_error_correction: smbios_types::MemoryArrayErrorCorrectionType::NoEcc, // None
             maximum_capacity: 0x00100000,            // 1 GB in KB
             memory_error_information_handle: 0xFFFE, // Not provided
             number_of_memory_devices: 1,
@@ -283,25 +284,25 @@ impl SbsaSmbiosPlatform {
             total_width: 64,
             data_width: 64,
             size: 0x0400,      // 1024 MB
-            form_factor: 0x09, // DIMM
+            form_factor: smbios_types::MemoryFormFactor::Dimm, // DIMM
             device_set: 0,
             device_locator: 1,
             bank_locator: 2,
-            memory_type: 0x1A,   // DDR4
-            type_detail: 0x0080, // Synchronous
+            memory_type: smbios_types::MemoryDeviceType::Ddr4,   // DDR4
+            type_detail: 0x0080.into(), // Synchronous
             speed: 3200,
             manufacturer: 3,
             serial_number: 4,
             asset_tag: 5,
             part_number: 6,
-            attributes: 0x01, // Single rank
+            attributes: 0x01.into(), // Single rank
             extended_size: 0,
             configured_memory_clock_speed: 3200,
             minimum_voltage: 1200,
             maximum_voltage: 1200,
             configured_voltage: 1200,
-            memory_technology: 0x02,                  // DRAM
-            memory_operating_mode_capability: 0x0004, // Volatile
+            memory_technology: smbios_types::MemoryDeviceTechnology::Dram, // DRAM
+            memory_operating_mode_capability: 0x0004.into(), // Volatile
             firmware_version: 7,
             module_manufacturer_id: 0,
             module_product_id: 0,
